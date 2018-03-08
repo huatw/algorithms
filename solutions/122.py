@@ -1,3 +1,19 @@
+# more generic thinking
+class Solution(object):
+    def maxProfit(self, prices):
+        if not prices:
+            return 0
+
+        buy, sell = -prices[0], 0
+
+        for price in prices:
+            buy, sell = max(buy, sell - price), max(sell, buy + price)
+
+        return sell
+
+
+
+
 class Solution(object):
     def maxProfit(self, prices):
         res = 0
