@@ -1,29 +1,25 @@
-# logN * logN
 class Solution:
-    def countNodes(self, root):
-        if not root:
-            return 0
-        l_depth = self.calDepth(root.left)
-        r_depth = self.calDepth(root.right, False)
+    def deleteNode(self, root, key):
+        if root is None:
+            return
 
-        if l_depth == r_depth:
-            return 2 ** (l_depth + 1) - 1
+        if root.val == key:
+            if root.right and root.left:
+                right = root.right
+                while right and right.left:
+                    right = right.left
+                right.left = root.left
+                return root.right
+            elif root.left:
+                return root.left
+            elif root.right:
+                return root.right
+            else:
+                return None
 
-        return 1 + self.countNodes(root.left) + self.countNodes(root.right)
-
-    def calDepth(self, root, isLeft = True):
-        if not root:
-            return 0
-
-        depth = 1
-        if isLeft:
-            while root.left:
-                depth += 1
-                root = root.left
+        elif key > root.val:
+            root.right = self.deleteNode(root.right, key)
         else:
-            while root.right:
-                depth += 1
-                root = root.right
+            root.left = self.deleteNode(root.left, key)
 
-        return depth
-
+        return root
