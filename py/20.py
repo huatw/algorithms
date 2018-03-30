@@ -1,21 +1,17 @@
 class Solution:
     def isValid(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
         stack = []
 
-        pair = {
-            '(': ')',
-            '{': '}',
-            '[': ']'
+        pairs = {
+            ')': '(',
+            '}': '{',
+            ']': '['
         }
 
-        for char in s:
-            if char == '(' or char == '{' or char == '[':
-                stack.append(char)
-            elif len(stack) == 0 or stack[-1] not in pair or pair[stack.pop()] != char:
+        for ch in s:
+            if ch not in pairs:
+                stack.append(ch)
+            elif pairs[ch] != stack.pop():
                 return False
 
         return len(stack) == 0
