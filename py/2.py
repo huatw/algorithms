@@ -23,9 +23,6 @@ class Solution:
             cur.next = ListNode(digit)
             cur = cur.next
 
-        if tenth:
-            cur.next = ListNode(tenth)
-        else:
-            cur.next = rest
+        cur.next = ListNode(tenth) if tenth else rest
 
         return dummy.next
