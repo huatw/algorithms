@@ -1,0 +1,6 @@
+{
+  "field1": "\"Hello",
+  "field2": "17e13",
+  "field3": [0, -1, 2.5, -2.5, 3.53e+10, -3.53e+10, 3.53e10, 3.53e-10],
+  "field4": { "fieldA": 1, "fieldB": "Hello" }
+}
