@@ -1,17 +1,11 @@
 #DP
 class Solution:
     def uniquePaths(self, m, n):
-        res = [[0 for _ in range(m)] for _ in range(n)]
+        res = [[0] * (n + 1) for _ in range(m + 1)]
+        res[0][1] = 1
 
-        for x, row in enumerate(res):
-            for y, acc in enumerate(row):
-                if x == 0 and y == 0:
-                    res[x][y] = 1
-                elif x == 0:
-                    res[x][y] = res[x][y - 1]
-                elif y == 0:
-                    res[x][y] = res[x - 1][y]
-                else:
-                    res[x][y] = res[x][y - 1] + res[x - 1][y]
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                res[i][j] = res[i][j - 1] + res[i - 1][j]
 
         return res[-1][-1]
