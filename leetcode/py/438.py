@@ -1,23 +1,19 @@
+# two pointer + map
 class Solution:
     def findAnagrams(self, s, p):
-        start, res = 0, []
-        map = collections.defaultdict(int)
+        s_dict = collections.defaultdict(int)
+        lo = 0
+        res = []
 
         for ch in p:
-            map[ch] += 1
+            s_dict[ch] += 1
 
-        for i, ch in enumerate(s):
-            if ch in map:
-                map[ch] -= 1
-                while map[ch] < 0:
-                    map[s[start]] += 1
-                    start += 1
-                if map[ch] == 0 and i - start == len(p) - 1:
-                    res.append(start)
-            else:
-                while start <= i:
-                    if s[start] in map:
-                        map[s[start]] += 1
-                    start += 1
+        for hi, ch in enumerate(s):
+            s_dict[ch] -= 1
+            while s_dict[ch] < 0:
+                s_dict[s[lo]] += 1
+                lo += 1
+            if hi - lo == len(p) - 1:
+                res.append(lo)
 
         return res

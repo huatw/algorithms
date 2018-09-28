@@ -29,3 +29,32 @@ class Solution:
             level = nextLevel
 
         return res[:-1]
+
+
+
+class Solution:
+    def zigzagLevelOrder(self, root):
+        res = []
+        stack = [root]
+        order = True
+
+        while stack:
+            order = not order
+            next_stack = []
+            res.append([])
+            for node in reversed(stack):
+                res[-1].append(node.val)
+                if order:
+                    if node.right:
+                        next_stack.append(node.right)
+                    if node.left:
+                        next_stack.append(node.left)
+                else:
+                    if node.left:
+                        next_stack.append(node.left)
+                    if node.right:
+                        next_stack.append(node.right)
+
+            stack = next_stack
+
+        return res

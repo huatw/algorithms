@@ -1,4 +1,6 @@
 # DP
+# thinking in state machine!!!
+# free -> hold -> cool -> free
 # free cool - free
 # free hold - hold
 # hold - cool

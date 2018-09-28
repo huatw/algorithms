@@ -1,3 +1,39 @@
+'''
+first cut: 1 to 3
+second cut: first cut + (1 to 3)
+third cut: second cut + (1 to 3)
+
+cut => check valid => terminate recursion / continute dfs
+'''
+class Solution:
+    def restoreIpAddresses(self, s):
+        res = []
+
+        # dfs fn,
+        # cuts: cuts we left
+        # acc: accumulated cut string
+        # rest_s: string to be cut
+        def dfs(cuts, acc, rest_s):
+            # terminate condition
+            if cuts == 0 and not rest_s:
+                res.append('.'.join(acc))
+
+            if cuts == 0 or not rest_s:
+                return
+
+            for i in range(1, min(4, 1 + len(rest_s))):
+                if int(rest_s[:i]) <= 255:
+                    dfs(cuts - 1, [*acc, rest_s[:i]], rest_s[i:])
+                if rest_s[0] == '0':
+                    break
+
+        # start dfs with initial setups
+        dfs(4, [], s)
+
+        return res
+
+
+
 # DFS
 class Solution:
     def restoreIpAddresses(self, s):

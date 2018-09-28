@@ -5,6 +5,28 @@
 #         self.next = None
 #         self.random = None
 
+# using map
+class Solution(object):
+    def copyRandomList(self, head):
+        if not head:
+            return
+
+        cur = head
+        node_map = {}
+
+        while cur:
+            node_map[cur] = RandomListNode(cur.label)
+            cur = cur.next
+
+        cur = head
+        while cur:
+            node_map[cur].next = node_map[cur.next] if cur.next in node_map else None
+            node_map[cur].random = node_map[cur.random] if cur.random in node_map else None
+            cur = cur.next
+
+        return node_map[head]
+
+
 class Solution(object):
     def copyRandomList(self, head):
         if not head:

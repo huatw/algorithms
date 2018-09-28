@@ -1,3 +1,6 @@
+#DP
+# state machine
+# hold <-> free
 class Solution(object):
     def maxProfit(self, prices, fee):
         if not prices or len(prices) < 2:
