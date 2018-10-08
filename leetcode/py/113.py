@@ -5,6 +5,21 @@
 #         self.left = None
 #         self.right = None
 
+class Solution:
+    def pathSum(self, root, sum):
+        if not root:
+            return []
+        if not root.left and not root.right and root.val == sum:
+            return [[root.val]]
+        res = []
+        if root.left:
+            for path in self.pathSum(root.left, sum - root.val):
+                res.append([root.val] + path)
+        if root.right:
+            for path in self.pathSum(root.right, sum - root.val):
+                res.append([root.val] + path)
+        return res
+
 # BFS
 class Solution:
     def pathSum(self, root, sum):

@@ -3,6 +3,21 @@ class Solution:
         if x < 0:
             return False
 
+        reversed_x = 0
+        while x:
+            x, digit = divmod(x, 10)
+            reversed_x = reversed_x * 10 + digit
+
+        return reversed_x == x
+
+
+
+
+class Solution:
+    def isPalindrome(self, x):
+        if x < 0:
+            return False
+
         return int(str(x)[::-1]) == x
 
 

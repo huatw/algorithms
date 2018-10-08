@@ -5,6 +5,53 @@
 #         self.next = None
 #         self.random = None
 
+# map one pass
+class Solution(object):
+    def copyRandomList(self, head):
+        if not head:
+            return
+
+        node_map = collections.defaultdict(lambda: None)
+        cur = head
+        while cur:
+            if cur not in node_map:
+                node_map[cur] = RandomListNode(cur.label)
+            if cur.next and cur.next not in node_map:
+                node_map[cur.next] = RandomListNode(cur.next.label)
+            if cur.random and cur.random not in node_map:
+                node_map[cur.random] = RandomListNode(cur.random.label)
+            node_map[cur].next = node_map[cur.next]
+            node_map[cur].random = node_map[cur.random]
+            cur = cur.next
+
+        return node_map[head]
+
+
+# map two pass
+class Solution(object):
+    def copyRandomList(self, head):
+        if not head:
+            return
+
+        node_map = collections.defaultdict(lambda: None)
+        cur = head
+        while cur:
+            node_map[cur] = RandomListNode(cur.label)
+            cur = cur.next
+
+        cur = head
+        while cur:
+            node_map[cur].next = node_map[cur.next]
+            node_map[cur].random = node_map[cur.random]
+            cur = cur.next
+
+        return node_map[head]
+
+
+
+
+
+
 # using map
 class Solution(object):
     def copyRandomList(self, head):

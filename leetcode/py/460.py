@@ -1,5 +1,5 @@
 # dict1: key => freq
-# dict2: freq => dict3(key: value)
+# dict2: freq => ordereddict3(key: value)
 class LFUCache:
     def __init__(self, capacity):
         self.k_freq = collections.defaultdict(int) # init value with 0

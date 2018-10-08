@@ -1,82 +1,85 @@
-# 100%
+# DoubleLinkedList & Map
 class Node:
-    def __init__(self, key, value):
+    def __init__(self, key, val):
         self.key = key
-        self.value = value
+        self.val = val
         self.prev = None
         self.next = None
 
 class LRUCache:
-
     def __init__(self, capacity):
         self.capacity = capacity
-        self.size = 0
-        self.dict = {}
-        self.head = Node(0, 0)
-        self.tail = Node(0, 0)
-        self.head.next = self.tail
-        self.tail.prev = self.head
+        self.d = {}
+        self.dummy_head = ListNode(None, None)
+        self.dummy_end = ListNode(None, None)
+        self.dummy_head.next = self.dummy_end
+        self.dummy_end.prev = self.dummy_head
 
-    def insertHead(self, node):
-        node.prev = self.head
-        node.next = self.head.next
-        self.head.next.prev = node
-        self.head.next = node
+    def move_to_first(self, node):
+        # 1. remove node from list
+        prev_node, next_node = node.prev, node.next
+        if prev_node:
+            prev_node.next = next_node
+        if next_node:
+            next_node.prev = prev_node
+        # 2. attach to head
+        dummy_next = self.dummy_head.next
+        self.dummy_head.next = node
+        dummy_next.prev = node
+        node.next = dummy_next
+        node.prev = self.dummy_head
 
-    def deleteNode(self, node):
-        node.prev.next = node.next
-        node.next.prev = node.prev
-
-    def get(self, key):
-        if key not in self.dict:
-            return -1
-
-        node = self.dict[key]
-        if self.head.next.key != key:
-            self.deleteNode(node)
-            self.insertHead(node)
-
-        return node.value
-
-    def put(self, key, value):
-        # update value
-        if key in self.dict:
-            if self.dict[key].value != value:
-                self.dict[key].value = value
-            self.get(key)
-            return
-        # insert new Node
-        node = Node(key, value)
-        self.dict[key] = node
-        self.insertHead(node)
-
-        if self.size < self.capacity:
-            self.size += 1
-        # delete tail node
-        else:
-            self.dict.pop(self.tail.prev.key)
-            self.deleteNode(self.tail.prev)
-
-
-# orderedDict
-class LRUCache:
-    def __init__(self, capacity):
-        self.capacity = capacity
-        self.d = collections.OrderedDict()
+    def remove_last(self):
+        prev_node, node = self.dummy_end.prev.prev, self.dummy_end.prev
+        node.next = None
+        node.prev = None
+        self.d.pop(node.key)
+        prev_node.next = self.dummy_end
+        self.dummy_end.prev = prev_node
 
     def get(self, key):
         if key not in self.d:
             return -1
+        # update linkedlist
+        self.move_to_first(self.d[key])
+        return self.d[key].val
 
-        value = self.d[key] # value = self.d.pop(key)
-        del self.d[key]     ### pop is slower...
-        self.d[key] = value
-        return value
+    def set(self, key, val):
+        if key not in self.d:
+            # insert
+            if self.capacity == len(self.d):
+                # remove last and insert
+                self.remove_last()
+            self.d[key] = Node(key, val)
+        else:
+            # update
+            self.d[key].val = val
+        self.move_to_first(self.d[key])
 
-    def put(self, key, value):
-        if key in self.d:
-            del self.d[key] # self.d.pop(key)
-        elif len(self.d) == self.capacity:
+
+# orderedDict
+import collections
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.d = collections.OrderedDict()
+        self.capacity = capacity
+
+    def touch(self, key):
+        self.d.move_to_end(key)
+        return self.d[key]
+
+    def get(self, key):
+        if key not in self.d:
+            return -1
+        return self.touch(key)
+
+    def set(self, key, value):
+        # insert
+        # remove least recently used
+        if len(self.d) == self.capacity and key not in self.d:
             self.d.popitem(last=False)
 
         self.d[key] = value
+        self.touch(key)
+

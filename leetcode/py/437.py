@@ -1,3 +1,21 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+# recursive
+class Solution:
+    def pathSum(self, root, target):
+        def recur(node, accs):
+            if not node:
+                return 0
+            res = sum([acc == node.val for acc in accs])
+            next_accs = [acc - node.val for acc in accs] + [target]
+            return res + recur(node.left, next_accs) + recur(node.right, next_accs)
+        return recur(root, [target])
+
+
 # DFS
 class Solution:
     def pathSum(self, root, sum):

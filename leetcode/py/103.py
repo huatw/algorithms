@@ -7,6 +7,54 @@
 
 class Solution:
     def zigzagLevelOrder(self, root):
+        if not root:
+            return []
+
+        res = []
+        level = [root]
+        is_left_to_right = True
+        while level:
+            level_vals = []
+            next_level = []
+            for node in reversed(level):
+                if not node:
+                    continue
+                level_vals.append(node.val)
+                if is_left_to_right:
+                    next_level.append(node.left)
+                    next_level.append(node.right)
+                else:
+                    next_level.append(node.right)
+                    next_level.append(node.left)
+
+            is_left_to_right = not is_left_to_right
+            if level_vals:
+                res.append(level_vals)
+            level = next_level
+
+        return res
+
+
+'''
+          1             1
+    2          3        2 3
+ 4    5     6     7     7 6 5 4
+8 9 10 11 12 13 14 15   8 9 10 11 12 13 14 15
+
+stack: [1]
+       [2, 3]
+        ...
+need a flag to indicate current traverse direction
+go through stack from idx n - 0
+2 3 -> append node.right node.left to next level
+7 6 5 4 -> append node.left node.right ..
+'''
+
+
+
+
+class Solution:
+    def zigzagLevelOrder(self, root):
         level = [root]
         res = []
         order = True

@@ -1,5 +1,42 @@
 class Solution:
     def compress(self, chars):
+        if not chars:
+            return 0
+
+        lo = 0
+        cur_ch = chars[0]
+        cnt = 0
+
+        for hi, ch in enumerate(chars):
+            if ch == cur_ch:
+                cnt += 1
+                continue
+            chars[lo] = cur_ch
+            lo += 1
+            if cnt > 1:
+                for digit in str(cnt):
+                    chars[lo] = digit
+                    lo += 1
+            cnt = 1
+            cur_ch = ch
+
+        chars[lo] = cur_ch
+        lo += 1
+        if cnt > 1:
+            for digit in str(cnt):
+                chars[lo] = digit
+                lo += 1
+
+        return lo
+
+
+'''
+aaabbbccc
+'''
+
+
+class Solution:
+    def compress(self, chars):
         idx = 0
         prev_ch, cnt = None, 0
 

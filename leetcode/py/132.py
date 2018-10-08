@@ -1,3 +1,31 @@
+# O(n2) O(n2)
+class Solution:
+    def minCut(self, s):
+        is_p = [[False] * len(s) for _ in range(len(s))]
+
+        def expand(lo, hi):
+            while lo >= 0 and hi < len(s) and s[lo] == s[hi]:
+                is_p[lo][hi] = True
+                lo -= 1
+                hi += 1
+
+        for i in range(len(s)):
+            expand(i, i)
+            expand(i, i + 1)
+
+        min_cuts = []
+
+        for i in range(len(s)):
+            cuts = i
+            for j in range(i + 1):
+                if is_p[j][i]:
+                    cuts = min(cuts, min_cuts[j - 1] + 1) if j != 0 else 0
+            min_cuts.append(cuts)
+
+        return min_cuts[-1]
+
+
+# O(n2) O(n)
 class Solution:
     def minCut(self, s):
         if not s:

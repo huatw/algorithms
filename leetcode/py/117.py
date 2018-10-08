@@ -5,30 +5,63 @@
 #         self.left = None
 #         self.right = None
 #         self.next = None
+'''
+     1
+   /  \
+  2    3
+ / \    \
+4   5    7
 
+     1 -> NULL
+   /  \
+  2 -> 3 -> NULL     parent
+ / \    \
+4-> 5 -> 7 -> NULL   next_parent child
+'''
+# Space O(1)
 class Solution:
-    # @param root, a tree link node
-    # @return nothing
     def connect(self, root):
-        prev, level_head = None, None
-        # up to dwon
-        while root:
-            while root:
-                if root.left:
-                    if level_head:
-                        prev.next = root.left
-                    else:
-                        level_head = root.left
-                    prev = root.left
-                if root.right:
-                    if level_head:
-                        prev.next = root.right
-                    else:
-                        level_head = root.right
-                    prev = root.right
-                root = root.next
+        if not root:
+            return
+        parent, next_parent, child = root, None, None
 
-            root = level_head
-            prev = None
-            level_head = None
+        while parent:
+            while parent:
+                if parent.left:
+                    if not next_parent:
+                        next_parent = parent.left
+                    if child:
+                        child.next = parent.left
+                    child = parent.left
+                if parent.right:
+                    if not next_parent:
+                        next_parent = parent.right
+                    if child:
+                        child.next = parent.right
+                    child = parent.right
+                parent = parent.next
+            parent, next_parent, child = next_parent, None, None
+
+
+
+
+# BFS
+class Solution:
+    def connect(self, root):
+        if not root:
+            return
+        level = [root]
+
+        while level:
+            for prev_node, next_node in zip(level, level[1:]):
+                prev_node.next = next_node
+            next_level = []
+            for node in level:
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            level = next_level
+
+
 

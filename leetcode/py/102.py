@@ -5,21 +5,50 @@
 #         self.left = None
 #         self.right = None
 
+# recur
 class Solution:
     def levelOrder(self, root):
-        level = [root]
         res = []
 
-        while level:
-            nextLevel = []
-            values = []
+        def recur(level):
+            vals = []
+            next_level = []
             for node in level:
-                if node:
-                    values.append(node.val)
-                    nextLevel.append(node.left)
-                    nextLevel.append(node.right)
+                if not node:
+                    continue
+                vals.append(node.val)
+                next_level.append(node.left)
+                next_level.append(node.right)
+            if vals:
+                res.append(vals)
+                recur(next_level)
 
-            res.append(values)
-            level = nextLevel
+        recur([root])
+        return res
 
-        return res[:-1]
+
+
+
+
+
+# iter
+class Solution:
+    def levelOrder(self, root):
+        res = []
+        stack = [root]
+        while stack:
+            level = []
+            next_stack = []
+
+            for node in stack:
+                if not node:
+                    continue
+                level.append(node.val)
+                next_stack.append(node.left)
+                next_stack.append(node.right)
+
+            if level:
+                res.append(level)
+            stack = next_stack
+
+        return res

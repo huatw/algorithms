@@ -1,3 +1,24 @@
+'''
+Input: [-2,1,-3,4,-1,2,1,-5,4]
+brute force O(n2) O(n2)
+
+max_subarray_at_4 = max(max_subarray_at_4, 4, max_subarr_ends_at_-5)
+max_subarray_at_-5 = max(max_subarray_at_-5, -5, max_subarr_ends_at_1)
+
+max_subarray_at(i) = max(max_subarray_at(i-1), input[i], max_subarr_ends_at(i-1))
+max_subarr_ends_at(i) = max(max_subarr_ends_at(i - 1) + input[i], input[i])
+'''
+class Solution:
+    def maxSubArray(self, nums):
+        max_subarr_ends_at, max_subarray_at = -float('inf'), -float('inf')
+
+        for num in nums:
+            max_subarray_at = max(max_subarray_at, num, max_subarr_ends_at)
+            max_subarr_ends_at = max(max_subarr_ends_at + num, num)
+
+        return max_subarr_at
+
+
 class Solution:
     def maxSubArray(self, nums):
         max_subarr_ends = [-float('inf')]
