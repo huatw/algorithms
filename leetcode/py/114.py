@@ -7,24 +7,22 @@
 
 class Solution:
     def flatten(self, root):
-        def helper(node, next_node):
-            left, right = node.left, node.right
-            if left and not right:
-                node.right = helper(left, next_node)
+        def recur(node, next_node):
+            if not node:
+                return next_node
+            if node.left and not node.right:
+                node.right = recur(node.left, next_node)
                 node.left = None
-            elif not left and right:
-                helper(right, next_node)
-            elif not left and not right:
-                node.right = next_node
+            elif not node.left and node.right:
+                recur(node.right, next_node)
+            elif node.left and node.right:
+                node.right = recur(node.left, recur(node.right, next_node))
+                node.left = None
             else:
-                node.right = helper(left, helper(right, next_node))
-                node.left = None
+                node.right = next_node
             return node
 
-        if not root:
-            return
-        helper(root, None)
-
+        recur(root, None)
 
 
 

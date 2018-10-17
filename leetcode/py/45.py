@@ -15,3 +15,4 @@ class Solution:
             if i == idx:
                 steps += 1
                 idx = next_idx
+

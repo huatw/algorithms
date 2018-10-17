@@ -5,13 +5,45 @@
 #         self.left = None
 #         self.right = None
 
+'''
+     1
+  2     3
+4   5  6  7
+'''
 class Solution:
     def findTilt(self, root):
+        total = 0
         def recur(node):
-            left_tilt, left_sum = recur(node.left) if node.left else (0, 0)
-            right_tilt, right_sum = recur(node.right) if node.right else (0, 0)
-            cur_tilt = left_tilt + right_tilt + abs(left_sum - right_sum)
-            cur_sum = left_sum + right_sum + node.val
-            return (cur_tilt, cur_sum)
+            nonlocal total
+            if not node:
+                return 0
+            left_sum, right_sum = recur(node.left), recur(node.right)
+            total += abs(left_sum - right_sum)
+            return left_sum + right_sum + node.val
 
-        return recur(root)[0]
+        recur(root)
+        return total
+
+
+# iter
+class Solution:
+    def findTilt(self, root):
+        if not root:
+            return 0
+        res = 0
+        sum_map = { None: 0 }
+        stack = [(root, False)]
+
+        while stack:
+            node, is_traversed = stack.pop()
+            if is_traversed:
+                sum_map[node] = sum_map[node.left] + sum_map[node.right] + node.val
+                res += abs(sum_map[node.left] - sum_map[node.right])
+            else:
+                stack.append((node, True))
+                if node.left:
+                    stack.append((node.left, False))
+                if node.right:
+                    stack.append((node.right, False))
+
+        return res

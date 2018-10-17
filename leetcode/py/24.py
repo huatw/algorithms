@@ -20,6 +20,17 @@ class Solution:
         return dummy.next
 
 
+# recur
+class Solution:
+    def swapPairs(self, head):
+        if not head or not head.next:
+            return head
+
+        next_node, next_head = head.next, head.next.next
+        head.next, next_node.next = self.swapPairs(next_head), head
+        return next_node
+
+
 
 class Solution(object):
     def swapPairs(self, head):
