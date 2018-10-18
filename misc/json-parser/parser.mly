@@ -12,7 +12,7 @@
 %token COMMA
 %token EOF
 
-%start <Json.value option> prog
+%start <Ast.expr option> prog
 
 %%
 

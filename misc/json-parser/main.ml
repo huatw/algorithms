@@ -22,7 +22,7 @@ let rec parse_and_print lexbuf =
     parse_and_print lexbuf
   | None ->  ()
 
-
+(*
 let () =
   let filename = Sys.argv.(1) in
   let inx = In_channel.create filename in
@@ -31,3 +31,12 @@ let () =
   parse_and_print lexbuf;
   print_endline "No Error...";
   In_channel.close inx
+ *)
+
+let lex s = s |> Lexing.from_string |> Lexer.read
+
+let parse s = s |> Lexing.from_string |> Parser.prog Lexer.read
+
+let interp s = match parse s with
+  | Some exp -> Interp.eval_prog exp
+  | None -> "empty string"

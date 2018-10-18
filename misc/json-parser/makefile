@@ -1,9 +1,9 @@
-.PHONY:	all clean byte native profile debug
+.PHONY:	all clean byte native profile debug utop
 
 OCB_FLAGS = -use-menhir -tag thread -use-ocamlfind -quiet -pkg core
-OCB = 		ocamlbuild
+OCB = ocamlbuild
 
-all: native # byte profile debug
+all: byte # byte profile debug
 
 clean:
 	$(OCB) -clean
@@ -13,6 +13,9 @@ native:
 
 byte:
 	$(OCB) $(OCB_FLAGS) main.byte
+
+utop: byte
+	utop
 
 profile:
 	$(OCB) -tag profile main.native
