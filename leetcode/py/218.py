@@ -1,3 +1,4 @@
+
 class Solution:
     def getSkyline(self, buildings):
         # events : left in, right in, image there is a moving line in y axis

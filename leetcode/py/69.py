@@ -11,6 +11,6 @@ class Solution:
             if mid * mid > hi:
                 hi = mid - 1
             else:
-                lo = mid - 1
+                lo = mid + 1
 
         return lo

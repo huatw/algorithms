@@ -1,3 +1,8 @@
+'''
+1 2 3 4 5 6 7
+1   2   3   4
+  7    6   5
+'''
 class Solution:
     def reorderList(self, head):
         if not head:

@@ -1,7 +1,7 @@
 # two map
 class Solution:
     def wordPattern(self, pattern, str):
-        p2s, s2p, arr = {}, {}, str.split(' ')
+        p2s, s2p, arr = {}, {}, str.split()
 
         if len(arr) != len(pattern):
             return False
@@ -18,7 +18,7 @@ class Solution:
 
 
 
-def wordPattern(self, pattern, d str):
+def wordPattern(self, pattern, str):
     s = pattern
     t = str.split()
 
@@ -32,7 +32,6 @@ def wordPattern(self, pattern, str):
     f = lambda s: map({}.setdefault, s, range(len(s)))
 
     return f(pattern) == f(str.split())
-
 
 
 

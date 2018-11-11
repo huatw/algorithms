@@ -1,3 +1,6 @@
+'''
+12321
+'''
 class Solution:
     def findPeakElement(self, nums):
         def search(start, end):

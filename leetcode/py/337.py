@@ -5,35 +5,37 @@
 #         self.left = None
 #         self.right = None
 
-class Solution(object):
+'''
+Input: [3,2,3,null,3,null,1]
+
+     3
+    / \
+   2   3
+    \   \
+     3   1
+
+'''
+class Solution:
     def rob(self, root):
-        cache = {}
+        cache = {None: 0}
+
         def recur(node):
-            if node in cache:
-                return cache[node]
-
-            if not node:
-                return 0
-
-            res1 = node.val
-
-            if node.left:
-                res1 += recur(node.left.left) + recur(node.left.right)
-            if node.right:
-                res1 += recur(node.right.left) + recur(node.right.right)
-
-            res2 = recur(node.left) + recur(node.right)
-            res = max(res1, res2)
-            cache[node] = res
-
-            return res
+            if node not in cache:
+                children_sum = recur(node.left) + recur(node.right)
+                grand_children_sum = node.val
+                if node.left:
+                    grand_children_sum += recur(node.left.left) + recur(node.left.right)
+                if node.right:
+                    grand_children_sum += recur(node.right.left) + recur(node.right.right)
+                cache[node] = max(children_sum, grand_children_sum)
+            return cache[node]
 
         return recur(root)
 
 
 
 
-class Solution(object):
+class Solution:
     def rob(self, root):
         def superrob(node):
             if not node:

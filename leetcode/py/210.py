@@ -1,27 +1,31 @@
-# DP O(mn)
-class Solution(object):
-    def wordBreak(self, s, wordDict):
-        wordSet = set(wordDict)
+class Solution:
+    def findOrder(self, numCourses, prerequisites):
+        next_map = collections.defaultdict(list)
+        dep_cnt_map = collections.defaultdict(int)
+        total_courses = set()
+        for (second, first) in prerequisites:
+            total_courses.add(first)
+            total_courses.add(second)
+            dep_cnt_map[second] += 1
+            next_map[first].append(second)
 
-        res = [[] for _ in range(len(s) + 1)]
-        res[0].append('')
+        level = set([first for (_, first) in prerequisites if dep_cnt_map[first] == 0])
+        seen = set(level)
+        res = list(level)
 
-        for i in range(1, len(s) + 1):
-            for j in range(i):
-                if s[j:i] in wordSet and len(res[j]) > 0:
-                    res[i].append((j, s[j:i]))
+        while level:
+            next_level = []
+            for first in level:
+                for second in next_map[first]:
+                    if second in seen:
+                        return []
+                    dep_cnt_map[second] -= 1
+                    if dep_cnt_map[second] == 0:
+                        res.append(second)
+                        seen.add(second)
+                        next_level.append(second)
+            level = next_level
 
-        def concatWords(idx):
-            ret = []
-
-            for preIdx, word in res[idx]:
-                if preIdx == 0:
-                    ret.append(word)
-                else:
-                    for preStr in concatWords(preIdx):
-                        ret.append(preStr + ' ' + word)
-
-            return ret
-
-        return concatWords(-1)
-
+        if len(seen) == len(total_courses):
+            return res + [i for i in range(numCourses) if i not in seen]
+        return []

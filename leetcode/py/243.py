@@ -1,14 +1,14 @@
-# DP
-class Solution(object):
-    def uniquePaths(self, m, n):
-        res = [[0] * (n + 1) for _ in range(m + 1)]
-        res[0][1] = 1
+class Solution:
+    def shortestDistance(self, words, word1, word2):
+        idx1, idx2 = -float('inf'), -float('inf')
+        res = float('inf')
 
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                res[i][j] = res[i-1][j] + res[i][j-1]
+        for i, word in enumerate(words):
+            if word == word1:
+                res = min(res, i - idx2)
+                idx1 = i
+            elif word == word2:
+                res = min(res, i - idx1)
+                idx2 = i
 
-        return res[i][j]
-
-
-
+        return res

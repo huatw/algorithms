@@ -1,4 +1,19 @@
-# DFS
+# Iter
+class Solution:
+    def permute(self, nums):
+        res = []
+        stack = [([], nums)]
+        while stack:
+            acc, rest_ns = stack.pop()
+            if not rest_ns:
+                res.append(acc)
+                continue
+            for i, n in enumerate(rest_ns):
+                stack.append((acc + [n], rest_ns[:i] + rest_ns[i + 1:]))
+        return res
+
+
+# DFS O(n2) O(n2)
 class Solution:
     def permute(self, nums):
         res = []

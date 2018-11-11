@@ -46,10 +46,8 @@ class Solution:
             grid[x][y] = 1
             uf.count += 1
 
-            for dx, dy in dxy:
-                m_x = x + dx
-                m_y = y + dy
-
+            for (dx, dy) in dxy:
+                m_x, m_y = x + dx, y + dy
                 if n > m_x >= 0 and m > m_y >= 0 and grid[m_x][m_y] == 1:
                     uf.union(x * m + y, m_x * m + m_y)
             ret.append(uf.count)

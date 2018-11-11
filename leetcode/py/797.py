@@ -1,4 +1,4 @@
-# DFS O(n) O(n)
+# DFS O(n) O(n2)
 class Solution:
     def allPathsSourceTarget(self, graph):
         path_map = {}
@@ -15,16 +15,23 @@ class Solution:
 
         return recur(0)
 
-'''
-Input: [[1,2], [3], [3], []]
-Output: [[0,1,3],[0,2,3]]
 
-0--->1
-|    |
-v    v
-2--->3 -> 4
 
-0 1 3 4
-0 2 3 4
-sub-paths after 3 can be shared by 1 and 2
-'''
+
+class Solution:
+    def allPathsSourceTarget(self, graph):
+        path_map = {}
+        stack = [(0, False)]
+        while stack:
+            start, is_traversed = stack.pop()
+            if graph[start]:
+                if is_traversed:
+                    path_map[start] = [[start] + path for node in graph[start] for path in path_map[node]]
+                else:
+                    stack.append((start, True))
+                    for node in graph[start]:
+                        stack.append((node, False))
+            else:
+                path_map[start] = [[start]]
+
+        return path_map[0]

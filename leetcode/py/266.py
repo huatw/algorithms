@@ -1,10 +1,15 @@
-def palindrome(s):
-     ch_set = set()
+import collections
+class Solution:
+    def canPermutePalindrome(self, s):
+        ch_cnt_map = collections.Counter(s)
 
-     for ch in s:
-          if ch in ch_set:
-               ch_set.remove(ch)
-          else:
-               ch_set.add(ch)
+        has_odd = False
 
-     return len(ch_set) <= 1
+        for (ch, cnt) in ch_cnt_map.items():
+            if cnt % 2 != 0:
+                if not has_odd:
+                    has_odd = True
+                else:
+                    return False
+
+        return True

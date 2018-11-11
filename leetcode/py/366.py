@@ -5,6 +5,14 @@ class TreeNode:
         self.val = val
         self.left, self.right = None, None
 """
+'''
+   1
+  2 3
+ 4 5
+[4, 5] [2] [3]
+node_height = max(h(node.left), h(node.right)) + 1
+'''
+
 # iter
 class Solution:
     def findLeaves(self, root):
@@ -39,7 +47,6 @@ class Solution:
 
 
 # recursive
-import collections
 class Solution:
     def findLeaves(self, root):
         if not root:

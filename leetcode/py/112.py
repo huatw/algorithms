@@ -15,6 +15,7 @@ class Solution:
 
         return self.hasPathSum(root.left, sum) or self.hasPathSum(root.right, sum)
 
+
 # BFS
 class Solution:
     def hasPathSum(self, root, sum):

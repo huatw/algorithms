@@ -3,6 +3,19 @@
 #     def __init__(self, x):
 #         self.label = x
 #         self.neighbors = []
+class Solution:
+    def cloneGraph(self, node):
+        node_copy_map = {None: None}
+
+        def dfs(node):
+            if node not in node_copy_map:
+                node_copy = UndirectedGraphNode(node.label)
+                node_copy_map[node] = node_copy
+                node_copy.neighbors = [dfs(child) for child in node.neighbors]
+            return node_copy_map[node]
+
+        return dfs(node)
+
 
 class Solution:
     # @param node, a undirected graph node

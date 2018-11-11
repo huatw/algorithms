@@ -1,5 +1,6 @@
 '''
-states_at_level_n[i] = min(states_at_level_n-1[i], states_at_level_n-1[i - 1]) + triangle_at_level_n[i]
+states_at_level_n[i] =
+    min(states_at_level_n-1[i], states_at_level_n-1[i - 1]) + triangle_at_level_n[i]
 
 [             [inf, 0, inf, inf, inf]
   [2],        [     2, inf, inf, inf]

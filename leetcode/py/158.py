@@ -1,3 +1,40 @@
+'''
+Given buf = "abc"
+read("abc", 1) // returns "a"
+read("abc", 2); // returns "bc"
+read("abc", 1); // returns ""
+Example 2:
+
+Given buf = "abc"
+read("abc", 4) // returns "abc"
+read("abc", 1); // returns ""
+'''
+class Solution(object):
+    def __init__(self):
+        self.last_buf = [None] * 4
+        self.last_pointer = 0
+        self.last_size = 0
+
+    def read(self, buf, n):
+        idx = 0
+        while True:
+            # write to buf
+            while self.last_pointer < self.last_size and idx < n:
+                buf[idx] = self.last_buf[self.last_pointer]
+                idx += 1
+                self.last_pointer += 1
+            # return if is enough
+            if idx == n:
+                return idx
+            # reset
+            self.last_pointer = 0
+            self.last_size = read4(self.last_buf)
+            # return if no data
+            if not self.last_size:
+                return idx
+
+
+
 class Solution:
     # memo last status
     def __init__(self):
