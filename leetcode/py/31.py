@@ -7,9 +7,11 @@
 class Solution:
     def nextPermutation(self, nums):
         i = len(nums) - 2
+        # find first dec val
         while i >= 0 and nums[i] >= nums[i + 1]:
             i -= 1
 
+        # exchange position
         if i >= 0:
             j = len(nums) - 1
             while j >= 0 and nums[j] <= nums[i]:

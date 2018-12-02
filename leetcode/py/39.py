@@ -1,3 +1,23 @@
+class Solution:
+    def combinationSum(self, candidates, target):
+        candidates = sorted(candidates)
+        res = []
+
+        def dfs(idx, total, path):
+            if total > target:
+                return
+            if total == target:
+                res.append([*path])
+                return
+            for i in range(idx, len(candidates)):
+                path.append(candidates[i])
+                dfs(i, total + candidates[i], path)
+                path.pop()
+
+        dfs(0, 0, [])
+        return res
+
+
 # DP
 class Solution(object):
     def combinationSum(self, candidates, target):

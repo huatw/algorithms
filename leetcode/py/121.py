@@ -1,5 +1,4 @@
 # brute force, two pointer double loop O(n2)
-
 # max_profit[i] = max(max_profit[i - 1], price[i] - min_price[i - 1])
 class Solution:
     def maxProfit(self, prices):

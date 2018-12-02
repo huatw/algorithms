@@ -1,8 +1,22 @@
+'''
+Input:
+[
+  "abcd",
+  "bnrt",
+  "crmy",
+  "dtye"
+]
+[
+    "ball",
+    "asee",
+    "let",
+    "lep"
+]
+'''
 class Solution:
     def validWordSquare(self, words):
-        for i in range(len(words)):
-            for j in range(i, len(words[i])):
-                if words[i][j] != words[j][i]:
+        for i, word in enumerate(words):
+            for j, ch in enumerate(word):
+                if j >= len(words) or i >= len(words[j]) or ch != words[j][i]:
                     return False
-
         return True

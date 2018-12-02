@@ -7,7 +7,7 @@ class Solution:
     def maxProfit(self, prices):
         max_free, max_hold = 0, -float('inf')
 
-        for i, price in enumerate(prices):
+        for price in prices:
             max_free = max(max_hold + price, max_free)
             max_hold = max(max_free - price, max_hold)
 
@@ -15,7 +15,7 @@ class Solution:
 
 
 # more generic thinking
-class Solution(object):
+class Solution:
     def maxProfit(self, prices):
         buy, sell = -prices[0], 0
 
@@ -27,7 +27,7 @@ class Solution(object):
 
 
 
-class Solution(object):
+class Solution:
     def maxProfit(self, prices):
         res = 0
 
@@ -40,7 +40,7 @@ class Solution(object):
 
 
 
-class Solution(object):
+class Solution:
     def maxProfit(self, prices):
         return sum([prices[i] - prices[i-1] if prices[i] > prices[i-1] else 0 for i in range(1, len(prices))])
 

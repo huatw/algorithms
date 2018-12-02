@@ -1,3 +1,18 @@
+class Solution:
+    def kthSmallest(self, root, k):
+        def preorder(node):
+            if not node:
+                return
+            yield from preorder(node.left)
+            yield node.val
+            yield from preorder(node.right)
+
+        for val in preorder(root):
+            k -= 1
+            if k == 0:
+                return val
+
+
 # recursion
 class Solution:
     def kthSmallest(self, root, k):

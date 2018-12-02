@@ -1,38 +1,21 @@
-# DP
-class Solution(object):
+'''
+Input: "226"
+Output: 3
+Explanation: It could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+dp[i] = dp[i - 1] + (dp[i - 2] if 26 >= ch[i - 1:i + 1] >= 1 else 0)
+'''
+class Solution:
     def numDecodings(self, s):
-        if not s or s[0] == '0':
-            return 0
-        res = [1, 1] # add one more for s[2]
+        dp = [1]
 
-        for i in range(1, len(s)):
-            if s[i] == '0':
-                if 0 < int(s[i-1:i+1]) <= 26:
-                    res.append(res[i-1])
-                else:
-                    return 0
-            else:
-                if s[i-1] != '0' and int(s[i-1:i+1]) <= 26:
-                    res.append(res[i] + res[i-1])
-                else:
-                    res.append(res[i])
+        for i, ch in enumerate(s):
+            val = 0
+            if ch != '0':
+                val = dp[-1]
+            elif i == 0 or s[i - 1] == '0':
+                return 0
+            if i > 0 and 26 >= int(s[i - 1:i + 1]) >= 10:
+                val += dp[-2]
+            dp.append(val)
 
-        return res[-1]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return dp[-1]

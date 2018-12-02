@@ -12,6 +12,23 @@ class Solution:
 
         return res
 
+# DFS backtracking
+class Solution:
+    def subsetsWithDup(self, nums):
+        nums = sorted(nums)
+        res = []
+
+        def dfs(acc, idx):
+            res.append(acc[:])
+            for i in range(idx, len(nums)):
+                if i == idx or nums[i] != nums[i - 1]:
+                    acc.append(nums[i])
+                    dfs(acc, i + 1)
+                    acc.pop()
+        dfs([], 0)
+        return res
+
+
 # DFS
 class Solution:
     def subsetsWithDup(self, nums):
@@ -50,11 +67,10 @@ class Solution:
 # set
 class Solution:
     def subsetsWithDup(self, nums):
-        nums.sort()
+        nums = sorted(nums)
         res = {()}
 
-        for n in nums:
-            for sub in set(res):
-                res.add(sub + (n,))
+        for num in nums:
+            res = res.union({st + (num,) for st in res})
 
         return [list(sub) for sub in res]

@@ -1,33 +1,66 @@
-class UnionFind:
-    def __init__(self, n):
-        self.fathers = [i for i in range(n)]
-        self.count = n
+class Solution:
+    def solve(self, board):
+        if not board or not board[0]:
+            return
 
-    def union(self, x, y):
-        fx = self.find(x)
-        fy = self.find(y)
+        M, N = len(board), len(board[0])
+        DIRECTIONS = [(1, 0), (-1, 0), (0, -1), (0, 1)]
+        def get_neighbors(x, y):
+            for dx, dy in DIRECTIONS:
+                nx, ny = x + dx, y + dy
+                if M > nx >= 0 and N > ny >= 0:
+                    yield (nx, ny)
 
-        if fx != fy:
-            self.fathers[fx] = fy
-            self.count -= 1
+        def dfs(x, y):
+            if board[x][y] == 'O':
+                board[x][y] = None
+                for nx, ny in get_neighbors(x, y):
+                    dfs(nx, ny)
 
-    def find(self, x):
-        if self.fathers[x] == x:
-            return x
+        for i in range(M):
+            dfs(i, 0)
+            dfs(i, N - 1)
 
-        self.fathers[x] = self.find(self.fathers[x])
-        return self.fathers[x]
+        for j in range(N):
+            dfs(0, j)
+            dfs(M - 1, j)
+
+        for i in range(M):
+            for j in range(N):
+                if board[i][j] == None:
+                    board[i][j] = 'O'
+                elif board[i][j] == 'O':
+                    board[i][j] = 'X'
+
+
+
+
 
 class Solution:
-    def validTree(self, n, edges):
-        uf = UnionFind(n)
+    def solve(self, board):
+        if not board or not board[0]:
+            return
+        M, N = len(board), len(board[0])
+        DIRECTIONS = [(1, 0), (-1, 0), (0, -1), (0, 1)]
 
-        for x, y in edges:
-            cnt = uf.count
-            uf.union(x, y)
-            if uf.count == cnt:
-                return False
+        def dfs(x, y):
+            if not (M > x >= 0 and N > y >= 0 and board[x][y] == 'O'):
+                return
+            board[x][y] = '#'
+            for (dx, dy) in DIRECTIONS:
+                dfs(x + dx, y + dy)
 
-        return uf.count == 1
+        for i in range(M):
+            dfs(i, 0)
+            dfs(i, N - 1)
 
+        for i in range(N):
+            dfs(0, i)
+            dfs(M - 1, i)
 
+        for i in range(M):
+            for j in range(N):
+                if board[i][j] == '#':
+                    board[i][j] = 'O'
+                elif board[i][j] == 'O':
+                    board[i][j] = 'X'

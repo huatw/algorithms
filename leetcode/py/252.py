@@ -7,15 +7,11 @@ class Interval(object):
 """
 
 class Solution:
-    """
-    @param intervals: an array of meeting time intervals
-    @return: if a person could attend all meetings
-    """
     def canAttendMeetings(self, intervals):
         intervals = sorted(intervals, key = lambda itv: itv.start)
 
-        for i, itv in enumerate(intervals[:-1]):
-            if itv.end > intervals[i + 1].start:
+        for prev_itv, next_itv in zip(intervals, intervals[1:]):
+            if prev_itv.end > next_itv.start:
                 return False
 
         return True

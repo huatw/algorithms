@@ -1,14 +1,16 @@
+# O(n) O(1)
 class Solution:
     def productExceptSelf(self, nums):
         res = []
-        p = 1
-        for n in nums:
-            res.append(p)
-            p *= n
 
         p = 1
-        for i, n in reversed(list(enumerate(nums))):
+        for num in nums:
+            res.append(p)
+            p *= num
+
+        p = 1
+        for i, num in reversed(list(enumerate(nums))):
             res[i] *= p
-            p *= n
+            p *= num
 
         return res

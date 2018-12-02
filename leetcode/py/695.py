@@ -3,28 +3,26 @@ class Solution:
     def maxAreaOfIsland(self, grid):
         if not grid or not grid[0]:
             return 0
-
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        row = len(grid)
-        col = len(grid[0])
-        max_area = 0
-        cur_area = 0
+        M, N = len(grid), len(grid[0])
+        DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        def get_neighbors(x, y):
+            for dx, dy in DIRECTIONS:
+                nx, ny = x + dx, y + dy
+                if M > nx >= 0 and N > ny >= 0:
+                    yield (nx, ny)
 
         def dfs(x, y):
-            nonlocal max_area, cur_area
-            if not (row > x >= 0 and col > y >= 0 and grid[x][y] == 1):
-                return
-            cur_area += 1
+            if grid[x][y] == 0:
+                return 0
             grid[x][y] = 0
+            total = 1
+            for nx, ny in get_neighbors(x, y):
+                total += dfs(nx, ny)
+            return total
 
-            for (dx, dy) in directions:
-                dfs(x + dx, y + dy)
+        res = 0
+        for i in range(M):
+            for j in range(N):
+                res = max(res, dfs(i, j))
 
-        for i in range(row):
-            for j in range(col):
-                if grid[i][j] == 1:
-                    cur_area = 0
-                    dfs(i, j)
-                    max_area = max(max_area, cur_area)
-
-        return max_area
+        return res

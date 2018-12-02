@@ -1,27 +1,22 @@
 # IMPORTANT
-#
 # O n2
-class Solution(object):
+class Solution:
     def lengthOfLIS(self, nums):
         if not nums:
             return 0
+        res = []
 
-        res = [0] * len(nums)
-        maxLen = 0
+        for num in nums:
+            res.append(1)
+            for i in range(len(res) - 1):
+                if nums[i] < num and res[i] >= res[-1]:
+                    res[-1] = res[i] + 1
 
-        for i in range(len(nums)):
-            for j in range(i):
-                if nums[i] > nums[j] and res[i] <= res[j]:
-                    res[i] = res[j] + 1
-                    maxLen = max(maxLen, res[i])
-
-        return maxLen + 1
-
-
+        return max(res)
 
 
 # O nlogn
-class Solution(object):
+class Solution:
     def binarySearch(self, tails, n):
         start, end = 0, len(tails)-1
 
@@ -54,8 +49,21 @@ class Solution(object):
         return len(tails)
 
 
+class Solution:
+    def lengthOfLIS(self, nums):
+        if not nums:
+            return 0
 
+        # tail number of different length
+        tails = [nums[0]]
 
+        for n in nums:
+            if n <= tails[0]:
+                tails[0] = n
+            elif n > tails[-1]:
+                tails.append(n)
+            else:
+                pos = bisect.bisect_left(tails, n)
+                tails[pos] = n
 
-
-
+        return len(tails)

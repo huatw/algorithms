@@ -1,27 +1,24 @@
 # DFS
 class Solution:
     def numIslands(self, grid):
+        DIRECTIONS = [(1, 0), (-1, 0), (0, -1), (0, 1)]
         cnt = 0
 
         def dfs(x, y):
-            if x < 0 or y < 0 or x >= len(grid) or y >= len(grid[0]) or grid[x][y] != '1':
+            if not (len(grid) > x >= 0 and len(grid[0]) > y >= 0 and grid[x][y] == '1'):
                 return
 
             grid[x][y] = '0'
-            dfs(x - 1, y)
-            dfs(x + 1, y)
-            dfs(x, y - 1)
-            dfs(x, y + 1)
+            for (dx, dy) in DIRECTIONS:
+                dfs(x + dx, y + dy)
 
-
-        for x, row in enumerate(grid):
-            for y, el in enumerate(row):
-                if el == '1':
+        for i, row in enumerate(grid):
+            for j, num in enumerate(row):
+                if num == '1':
                     cnt += 1
-                    dfs(x, y)
+                    dfs(i, j)
 
         return cnt
-
 # BFS
 class Solution:
     def numIslands(self, grid):

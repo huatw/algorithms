@@ -1,19 +1,13 @@
-# hashmap O(n2)
 class Solution:
     def fourSumCount(self, A, B, C, D):
-        res = 0
-        m = set()
+        ab_sum_map = collections.defaultdict(int)
 
-        for na in A:
-            for nb in B:
-                m.add(-(na + nb))
+        for a in A:
+            for b in B:
+                ab_sum_map[a + b] += 1
 
-        for nc in C:
-            for nd in D:
-                if nc + nd in m:
-                    res += 1
+        return sum(ab_sum_map[-(c + d)] for c in C for d in D)
 
-        return res
 
 
 def fourSumCount(self, A, B, C, D):

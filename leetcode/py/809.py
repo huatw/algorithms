@@ -4,7 +4,6 @@ S = "heeellooo"
 words = ["hello", "hi", "helo"]
 Output: 1
 '''
-
 class Solution:
     def expressiveWords(self, s, words):
         def parse(s): # str -> [(ch, cnt)
@@ -20,7 +19,7 @@ class Solution:
 
         parsed_s = parse(s)
 
-        def is_extension(parsed_word):
+        def is_extension(parsed_word, parsed_s):
             if len(parsed_word) != len(parsed_s):
                 return False
             for ((ch1, cnt1), (ch2, cnt2)) in zip(parsed_word, parsed_s):
@@ -28,4 +27,4 @@ class Solution:
                     return False
             return True
 
-        return sum(is_extension(parse(word)) for word in words)
+        return sum(is_extension(parse(word), parsed_s) for word in words)

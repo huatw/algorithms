@@ -1,20 +1,54 @@
+# O(n) O(1)
 class Solution:
     def longestValidParentheses(self, s):
-        start = -1
+        left, right = 0, 0
+        max_len = 0
+        for i, ch in enumerate(s):
+            if ch == '(':
+                left += 1
+            else:
+                right += 1
+            if left == right:
+                max_len = max(max_len, 2 * right)
+            if right > left:
+                left, right = 0, 0
+
+        left, right = 0, 0
+        for i, ch in reversed(list(enumerate(s))):
+            if ch == '(':
+                left += 1
+            else:
+                right += 1
+            if left == right:
+                max_len = max(max_len, 2 * left)
+            if left > right:
+                left, right = 0, 0
+
+        return max_len
+'''
+(())
+()()
+'''
+# stack
+class Solution:
+    def longestValidParentheses(self, s):
         stack = []
         res = 0
+        left_bound = -1
 
         for i, ch in enumerate(s):
             if ch == '(':
                 stack.append(i)
-            elif not stack:
-                start = i
             else:
-                stack.pop()
                 if not stack:
-                    res = max(res, i - start)
+                    left_bound = i
                 else:
-                    res = max(res, i - stack[-1])
+                    stack.pop()
+                    if not stack:
+                        res = max(res, i - left_bound)
+                    else:
+                        res = max(res, i - stack[-1])
+
         return res
 
 

@@ -1,27 +1,22 @@
 class Solution:
     def threeSumClosest(self, nums, target):
-        nums.sort()
+        nums = sorted(nums)
+        min_diff = float('inf')
+        res = None
 
-        closet = math.inf
-
-        for i in range(len(nums) - 2):
-            start = i + 1
-            end = len(nums) - 1
-
-            while start < end:
-                v = nums[i] + nums[start] + nums[end]
-
-                if abs(closet - target) > abs(v - target):
-                    closet = v
-
-                if v == target:
-                    return closet
-                elif v < target:
-                    start += 1
+        for i, num in enumerate(nums[:-2]):
+            lo, hi = i + 1, len(nums) - 1
+            while lo < hi:
+                total = num + nums[lo] + nums[hi]
+                diff = abs(total - target)
+                if diff < min_diff:
+                    min_diff = diff
+                    res = total
+                if total < target:
+                    lo += 1
+                elif total > target:
+                    hi -= 1
                 else:
-                    end -= 1
-
-        return closet
-
-
+                    return res
+        return res
 

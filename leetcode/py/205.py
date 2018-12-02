@@ -1,43 +1,44 @@
-# two map
+import collections
+
 class Solution:
     def isIsomorphic(self, s, t):
-        t2s, s2t = {}, {}
-
         if len(s) != len(t):
             return False
 
+        def normalize(chs):
+            ch_idx_map = {}
+            res = []
+            for i, ch in enumerate(chs):
+                if ch not in ch_idx_map:
+                    ch_idx_map[ch] = i
+                res.append(str(ch_idx_map[ch]))
+            return ''.join(res)
+
+        return normalize(s) == normalize(t)
+
+
+
+
+# len(s) + len(t)
+class Solution:
+    def isIsomorphic(self, s, t):
+        if len(s) != len(t):
+            return False
+
+        s_t_map, t_s_map = {}, {}
+
         for chs, cht in zip(s, t):
-            if chs not in s2t and cht not in t2s:
-                s2t[chs] = cht
-                t2s[cht] = chs
-            elif cht not in t2s or chs not in s2t or t2s[cht] != chs or s2t[chs] != cht:
+            if chs not in s_t_map and cht not in t_s_map:
+                s_t_map[chs] = cht
+                t_s_map[cht] = chs
+            elif chs in s_t_map and chs in s_t_map:
+                if s_t_map[chs] != cht or t_s_map[cht] != chs:
+                    return False
+            else:
                 return False
 
         return True
 
-
-
-
 class Solution:
     def isIsomorphic(self, s, t):
         return [*map(s.find, s)] == [*map(t.find, t)]
-
-
-
-
-def wordPattern(self, pattern, str):
-    # set ch in s with minimal ch index
-    f = lambda s: [*map({}.setdefault, s, range(len(s)))]
-    return f(pattern) == f(str.split())
-
-
-
-
-def wordPattern(self, pattern, str):
-    s = pattern
-    t = str.split()
-
-    return len(set(zip(s, t))) == len(set(s)) == len(set(t)) and len(s) == len(t)
-
-
-

@@ -21,8 +21,6 @@ class Solution(object):
                     slow = slow.next
                 return slow
 
-        return
-
 
 
 

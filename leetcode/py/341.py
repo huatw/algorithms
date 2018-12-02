@@ -1,24 +1,36 @@
 class NestedIterator(object):
-
     def __init__(self, nestedList):
-        self.stack = nestedList
+        self.dq = collections.deque(nestedList)
 
     def next(self):
-        first = self.stack[0]
-        self.stack = self.stack[1:]
-        # first, *self.stack = self.stack
-        return first.getInteger()
+        return self.dq.popleft().getInteger()
 
     def hasNext(self):
-        if len(self.stack) > 0:
-            if self.stack[0].isInteger():
+        if not self.dq:
+            return False
+        if self.dq[0].isInteger():
+            return True
+        self.dq.extendleft(self.dq.popleft().getList()[::-1])
+        return self.hasNext()
+
+
+
+
+class NestedIterator(object):
+    def __init__(self, nestedList):
+        self.stack = nestedList[::-1]
+
+    def next(self):
+        return self.stack.pop().getInteger()
+
+    def hasNext(self):
+        if self.stack:
+            top = self.stack[-1]
+            if top.isInteger():
                 return True
-            self.stack = self.stack[0].getList() + self.stack[1:]
+            self.stack.extend(self.stack.pop().getList()[::-1])
             return self.hasNext()
-
         return False
-
-
 
 
 class NestedIterator(object):
@@ -43,5 +55,3 @@ class NestedIterator(object):
             return True
         except StopIteration:
             return False
-
-

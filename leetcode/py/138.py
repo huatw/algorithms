@@ -1,12 +1,5 @@
-# Definition for singly-linked list with a random pointer.
-# class RandomListNode(object):
-#     def __init__(self, x):
-#         self.label = x
-#         self.next = None
-#         self.random = None
-
 # map one pass
-class Solution(object):
+class Solution:
     def copyRandomList(self, head):
         if not head:
             return
@@ -26,9 +19,8 @@ class Solution(object):
 
         return node_map[head]
 
-
 # map two pass
-class Solution(object):
+class Solution:
     def copyRandomList(self, head):
         if not head:
             return
@@ -48,33 +40,7 @@ class Solution(object):
         return node_map[head]
 
 
-
-
-
-
-# using map
-class Solution(object):
-    def copyRandomList(self, head):
-        if not head:
-            return
-
-        cur = head
-        node_map = {}
-
-        while cur:
-            node_map[cur] = RandomListNode(cur.label)
-            cur = cur.next
-
-        cur = head
-        while cur:
-            node_map[cur].next = node_map[cur.next] if cur.next in node_map else None
-            node_map[cur].random = node_map[cur.random] if cur.random in node_map else None
-            cur = cur.next
-
-        return node_map[head]
-
-
-class Solution(object):
+class Solution:
     def copyRandomList(self, head):
         if not head:
             return head

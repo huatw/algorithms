@@ -1,5 +1,19 @@
 class Solution:
     def findTarget(self, root, k):
+        seen = set()
+        def inorder(node):
+            if not node:
+                return False
+            if inorder(node.left) or k - node.val in seen:
+                return True
+            seen.add(node.val)
+            return inorder(node.right)
+
+        return inorder(root)
+
+
+class Solution:
+    def findTarget(self, root, k):
         stack = []
         def traverse(node):
             if not node:

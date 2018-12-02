@@ -1,3 +1,26 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def mergeKLists(self, lists):
+        dummy = ListNode(None)
+        cur = dummy
+
+        hq = [(head.val, i, head) for i, head in enumerate(lists) if head]
+        heapq.heapify(hq)
+
+        while hq:
+            val, i, node = heapq.heappop(hq)
+            cur.next = node
+            cur = cur.next
+            if node.next:
+                heapq.heappush(hq, (node.next.val, i, node.next))
+        return dummy.next
+
+
 # divde : py exceed maximum recursion. js can pass
 class Solution:
     def mergeKLists(self, lists):

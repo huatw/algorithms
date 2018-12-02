@@ -1,26 +1,24 @@
+
+
 # The read4 API is already defined for you.
 # @param buf, a list of characters
 # @return an integer
 # def read4(buf):
-
 class Solution(object):
     def read(self, buf, n):
-        buf4 = [''] * 4
-        cnt = 0
+        temp_buf = [''] * 4
+        idx = 0
+        while idx < n:
+            temp_n = read4(temp_buf)
+            if temp_n == 0:
+                break
+            temp_i = 0
+            while idx < n and temp_i < temp_n:
+                buf[idx] = temp_buf[temp_i]
+                idx += 1
+                temp_i += 1
 
-        while n > 0:
-            read_n = read4(buf4)
-            if read_n == 0:
-                break
-            if n >= read_n:
-                buf[cnt:cnt + read_n] = buf4[:read_n]
-                cnt += read_n
-                n -= read_n
-            else:
-                buf[cnt:cnt + n] = buf4[:n]
-                cnt += n
-                break
-        return cnt
+        return idx
 
 
 

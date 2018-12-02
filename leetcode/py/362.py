@@ -1,14 +1,17 @@
-import collections
 class HitCounter:
     def __init__(self):
         self.dq = collections.deque()
 
+    def clean_dq(self, timestamp):
+        while self.dq and timestamp - self.dq[0] >= 300:
+            self.dq.popleft()
+
     def hit(self, timestamp):
+        self.clean_dq(timestamp)
         self.dq.append(timestamp)
 
     def getHits(self, timestamp):
-        while len(self.dq) and timestamp - self.dq[0] >= 300:
-            self.dq.popleft()
+        self.clean_dq(timestamp)
         return len(self.dq)
 
 '''

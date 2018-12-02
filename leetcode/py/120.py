@@ -9,7 +9,7 @@ states_at_level_n[i] =
   [4,1,8,3]   [     14,11,  21,  16 ]
 ]
 '''
-class Solution(object):
+class Solution:
     def minimumTotal(self, triangle):
         if not triangle:
             return 0
@@ -21,6 +21,18 @@ class Solution(object):
                 dp[i + 1] = min(dp[i + 1], dp[i]) + num
 
         return min(dp)
+
+class Solution:
+    def minimumTotal(self, triangle):
+        res = [float('inf'), 0]
+
+        for level in triangle:
+            level_res = [float('inf')]
+            for i, num in enumerate(level):
+                level_res.append(min(res[i + 1], res[i]) + num)
+            res = level_res + [float('inf')]
+
+        return min(res)
 
 
 '''
@@ -52,20 +64,3 @@ def minimum_total(triangle):
 
     return min(dp)
 minimum_total([2, 3,4, 6,5,7, 4,1,8,3])
-
-# DP
-# n -> next level n or n+1
-class Solution(object):
-    def minimumTotal(self, triangle):
-        res = [float('inf'), 0]
-
-        for level in triangle:
-            newRes = [float('inf')]
-            for i, n in enumerate(level):
-                newRes.append(min(res[i+1], res[i]) + n)
-            res = newRes + [float('inf')]
-
-        return min(res)
-
-
-

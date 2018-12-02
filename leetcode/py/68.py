@@ -1,26 +1,58 @@
+'''
+[aa, bb, cc]
+'aa bb cc ?'
+'''
 class Solution:
     def fullJustify(self, words, max_width):
-        if not words:
-            return [' ' * max_width]
+        def will_overflow(cur_words, cur_len, word):
+            return len(cur_words) + cur_len + len(word) > max_width
 
-        curr_line = []
-        curr_line_width = 0
-        lines = []
+        def gen_line(cur_words, cur_len):
+            nspaces = len(cur_words) - 1 if len(cur_words) > 1 else 1
+            for i in range(max_width - cur_len):
+                cur_words[i % nspaces] += ' '
+            return ''.join(cur_words)
+
+        res = []
+        cur_len, cur_words = 0, []
 
         for word in words:
-            if len(word) + curr_line_width + len(curr_line) > maxWidth:
-                # Need to add justified line
-                nspaces = 1 if len(curr_line) == 1 else len(curr_line) - 1
-                for i in range(maxWidth - curr_line_width):
-                    curr_line[i % nspaces] += ' '
-                lines.append(''.join(curr_line))
-                curr_line = []
-                curr_line_width = 0
-            curr_line.append(word)
-            curr_line_width += len(word)
+            if will_overflow(cur_words, cur_len, word):
+                res.append(gen_line(cur_words, cur_len))
+                cur_len, cur_words = 0, []
+            cur_words.append(word)
+            cur_len += len(word)
 
-        last_line = ' '.join(curr_line)
-        last_line = last_line.strip()
-        last_line = last_line + ' ' * (maxWidth - len(last_line))
-        lines.append(last_line)
-        return lines
+        return res + [' '.join(cur_words).ljust(max_width)]
+
+
+比如第一行最后面本来放不下, 现在可以把下一个单词拆分, 要求是至少俩字符, 并要加一个-连接符。
+# split word if word
+class Solution:
+    def fullJustify(self, words, max_width):
+        def will_overflow(cur_words, cur_len, word):
+            return len(cur_words) + cur_len + len(word) > max_width
+
+        def gen_line(cur_words, cur_len, word):
+            if len(word) == 1:
+                nspaces = len(cur_words) - 1 if len(cur_words) > 1 else 1
+                for i in range(max_width - cur_len):
+                    cur_words[i % nspaces] += ' '
+                return word, ''.join(cur_words)
+            else:
+                idx = max_width - cur_len - len(cur_words) - 1
+                left, right = word[:idx], word[idx:]
+                return right, ' '.join(cur_words + [left + '-'])
+
+        res = []
+        cur_len, cur_words = 0, []
+
+        for word in words:
+            if will_overflow(cur_words, cur_len, word):
+                word, line = gen_line(cur_words, cur_len, word)
+                res.append(line)
+                cur_len, cur_words = 0, []
+            cur_words.append(word)
+            cur_len += len(word)
+
+        return res + [' '.join(cur_words).ljust(max_width)]

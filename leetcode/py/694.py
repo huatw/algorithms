@@ -2,29 +2,29 @@ class Solution:
     def numDistinctIslands(self, grid):
         if not grid or not grid[0]:
             return 0
-
-        row = len(grid)
-        col = len(grid[0])
-        directions = [(1, 0), (-1, 0), (0, -1), (0, 1)]
+        M, N = len(grid), len(grid[0])
+        DIRECTIONS = [(1, 0), (-1, 0), (0, -1), (0, 1)]
+        def get_neighbors(x, y):
+            for dx, dy in DIRECTIONS:
+                nx, ny = x + dx, y + dy
+                if M > nx >= 0 and N > ny >= 0:
+                    yield (nx, ny)
 
         nodes_set = set()
-        nodes = []
-        base_node = None
 
-        def dfs(x, y):
-            if not (row > x >= 0 and col > y >= 0 and grid[x][y] == 1):
+        def dfs(x, y, base_x, base_y, path):
+            if grid[x][y] == 0:
                 return
-            nodes.append((x - base_node[0], y - base_node[1]))
+            path.append((x - base_x, y - base_y))
             grid[x][y] = 0
-            for (dx, dy) in directions:
-                dfs(x + dx, y + dy)
+            for nx, ny in get_neighbors(x, y):
+                dfs(nx, ny, base_x, base_y, path)
+            return path
 
-        for i in range(row):
-            for j in range(col):
+        for i in range(M):
+            for j in range(N):
                 if grid[i][j] == 1:
-                    base_node = (i, j)
-                    nodes = [(0, 0)]
-                    dfs(i, j)
-                    nodes_set.add(tuple(nodes))
-
+                    nodes_set.add(tuple(dfs(i, j, i, j, [])))
         return len(nodes_set)
+
+

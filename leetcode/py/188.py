@@ -18,24 +18,18 @@ class Solution:
         if k < 1:
             return 0
         if 2 * k >= len(prices):
-            return sum(i - j for i, j in zip(prices[1:], prices[:-1]) if i - j > 0)
+            return sum(i - j for i, j in zip(prices[1:], prices) if i - j > 0)
 
-        sells = [0] * k
-        buys = [-float('inf')] * k
+        sells, buys = [0] * k, [-float('inf')] * k
 
         for price in prices:
-            # update sell1
             for i, sell in enumerate(sells):
-                sells[i] = max(sells[i], price + buys[i])
-
-            # update buys
+                sells[i] = max(sell, buys[i] + price)
             for i, buy in enumerate(buys):
-                if i == 0:
-                    buys[i] = max(buys[i], -price)
-                else:
-                    buys[i] = max(buys[i], sells[i - 1] - price)
+                buys[i] = max(buy, (0 if i == 0 else sells[i - 1]) - price)
 
-        return sells[-1]
+        return max(sells[-1], buys[-1])
+
 
 
 
@@ -45,13 +39,10 @@ class Solution:
 
 
 # MLE
-class Solution(object):
+class Solution:
     def maxProfit(self, k, prices):
         buys = [-float('inf')] * (k + 1)
         sells = [0] * (k + 1)
-
-        buy1, buy2 = -float('inf'), -float('inf')
-        sell1, sell2 = 0, 0
 
         for price in prices:
             for i in range(k, 0, -1):
@@ -64,16 +55,13 @@ class Solution(object):
 
 
 
-class Solution(object):
+class Solution:
     def maxProfit(self, k, prices):
         if k >= len(prices) // 2:
             return sum(i - j for i, j in zip(prices[1:], prices[:-1]) if i - j > 0)
 
         buys = [-float('inf')] * (k + 1)
         sells = [0] * (k + 1)
-
-        buy1, buy2 = -float('inf'), -float('inf')
-        sell1, sell2 = 0, 0
 
         for price in prices:
             for i in range(k, 0, -1):

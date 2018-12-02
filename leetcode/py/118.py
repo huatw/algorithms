@@ -1,4 +1,16 @@
 class Solution:
+    def generate(self, num_rows):
+        if num_rows == 0:
+            return []
+        res = []
+        for level_len in range(1, num_rows + 1):
+            level = [1] * level_len
+            for i, num in enumerate(level[1:-1]):
+                level[i + 1] = res[-1][i + 1] + res[-1][i]
+            res.append(level)
+        return res
+
+class Solution:
     def generate(self, numRows):
         if numRows == 0:
             return []

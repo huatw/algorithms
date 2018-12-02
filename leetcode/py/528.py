@@ -2,10 +2,7 @@ class Solution:
     def __init__(self, w):
         self.w = []
         for n in w:
-            if not self.w:
-                self.w.append(n)
-            else:
-                self.w.append(self.w[-1] + n)
+            self.w.append(n + (self.w[-1] if self.w else 0))
 
     def pickIndex(self):
         def bisect_left(nums, n):
@@ -24,9 +21,10 @@ class Solution:
 
 
 class Solution:
+    # O(n)
     def __init__(self, w):
         self.w = list(itertools.accumulate(w))
-
+    #O(logn)
     def pickIndex(self):
         return bisect.bisect_left(self.w, random.randint(1, self.w[-1]))
 

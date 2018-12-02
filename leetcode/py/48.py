@@ -20,7 +20,7 @@ x - y axis:
   [2,5,8],
   [3,6,9]
 ]
-x axis:
+y axis:
 [
   [7,4,1],
   [8,5,2],
@@ -35,4 +35,8 @@ class Solution:
 
         for i in range(len(matrix)):
             for j in range(len(matrix) // 2):
-                matrix[i][j], matrix[i][len(matrix) - j - 1] = matrix[i][len(matrix) - j - 1], matrix[i][j]
+                matrix[i][j], matrix[i][len(matrix) - j - 1] = \
+                  matrix[i][len(matrix) - j - 1], matrix[i][j]
+
+
+

@@ -1,33 +1,20 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
 # recur
 class Solution:
     def levelOrder(self, root):
-        res = []
-
-        def recur(level):
-            vals = []
+        if not root:
+            return []
+        def bfs(level, res):
+            if not level:
+                return res
+            res.append([node.val for node in level])
             next_level = []
             for node in level:
-                if not node:
-                    continue
-                vals.append(node.val)
-                next_level.append(node.left)
-                next_level.append(node.right)
-            if vals:
-                res.append(vals)
-                recur(next_level)
-
-        recur([root])
-        return res
-
-
-
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            return bfs(next_level, res)
+        return bfs([root], [])
 
 
 

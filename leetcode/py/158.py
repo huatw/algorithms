@@ -9,7 +9,7 @@ Given buf = "abc"
 read("abc", 4) // returns "abc"
 read("abc", 1); // returns ""
 '''
-class Solution(object):
+class Solution:
     def __init__(self):
         self.last_buf = [None] * 4
         self.last_pointer = 0

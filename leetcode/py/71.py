@@ -1,15 +1,13 @@
 class Solution:
     def simplifyPath(self, path):
-        names = re.findall(r'[^/]+', path)
+        names = path.split('/')
         stack = []
 
-        for ch in names:
-            if ch == '..':
-                if len(stack):
+        for name in names:
+            if name == '..':
+                if stack:
                     stack.pop()
-            elif ch != '.':
-                stack.append(ch)
+            elif name and name != '.':
+                stack.append(name)
 
-        res = '/' + '/'.join(stack)
-
-        return res
+        return '/' + '/'.join(stack)

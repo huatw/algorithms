@@ -11,12 +11,14 @@ class Solution:
     def searchMatrix(self, matrix, target):
         if not matrix or not matrix[0]:
             return False
-        k = -1
+        M, N = len(matrix), len(matrix[0])
+        i, j = M - 1, 0
 
-        for row in matrix:
-            while len(row) + k > 0 and row[k] > target:
-                k -= 1
-            if row[k] == target:
+        while i >= 0 and j < N:
+            if matrix[i][j] > target:
+                i -= 1
+            elif matrix[i][j] < target:
+                j += 1
+            else:
                 return True
-
         return False

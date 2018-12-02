@@ -1,55 +1,35 @@
-# Union Find
-# https://www.lintcode.com/problem/number-of-islands-ii/description
-# https://github.com/awangdev/LintCode/blob/master/Java/Number%20of%20Islands%20II.java
-
-"""
-Definition for a point.
-class Point:
-    def __init__(self, a=0, b=0):
-        self.x = a
-        self.y = b
-"""
-
 class UnionFind:
-    def __init__(self, size):
-        self.count = 0
-        self.father = [i for i in range(size)]
+    def __init__(self):
+        self.m = {}
+        self.size = 0
 
-    def union(self, x, y):
-        root_x, root_y = self.find(x), self.find(y)
-        if root_x != root_y:
-            self.father[root_x] = root_y
-            self.count -= 1
+    def add(self, p):
+        self.m[p] = p
+        self.size += 1
 
-    def find(self, x):
-        if self.father[x] == x:
-            return x
+    def union(self, p1, p2):
+        if p2 not in self.m:
+            return
+        r1, r2 = self.find(p1), self.find(p2)
+        if r1 != r2:
+            self.size -= 1
+            self.m[r1] = r2
 
-        self.father[x] = self.find(self.father[x])
-
-        return self.father[x]
+    def find(self, p):
+        if self.m[p] != p:
+            self.m[p] = self.find(self.m[p])
+        return self.m[p]
 
 class Solution:
-    def numIslands2(self, n, m, operators):
-        ret = []
-        dxy = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        grid = [[0] * m for _ in range(n)]
+    def numIslands2(self, m, n, positions):
+        DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        uf = UnionFind()
+        res = []
 
-        uf = UnionFind(m * n)
+        for x, y in positions:
+            uf.add((x, y))
+            for dx, dy in DIRECTIONS:
+                uf.union((x, y), (dx + x, dy + y))
+            res.append(uf.size)
 
-        for op in operators:
-            x, y = op.x, op.y
-            if grid[x][y] == 1:
-                ret.append(uf.count)
-                continue
-
-            grid[x][y] = 1
-            uf.count += 1
-
-            for (dx, dy) in dxy:
-                m_x, m_y = x + dx, y + dy
-                if n > m_x >= 0 and m > m_y >= 0 and grid[m_x][m_y] == 1:
-                    uf.union(x * m + y, m_x * m + m_y)
-            ret.append(uf.count)
-
-        return ret
+        return res

@@ -23,26 +23,19 @@ class Solution:
     def connect(self, root):
         if not root:
             return
-        parent, next_parent, child = root, None, None
-
-        while parent:
-            while parent:
-                if parent.left:
-                    if not next_parent:
-                        next_parent = parent.left
+        head = root
+        while head:
+            next_head, prev_child = None, None
+            while head:
+                for child in [head.left, head.right]:
                     if child:
-                        child.next = parent.left
-                    child = parent.left
-                if parent.right:
-                    if not next_parent:
-                        next_parent = parent.right
-                    if child:
-                        child.next = parent.right
-                    child = parent.right
-                parent = parent.next
-            parent, next_parent, child = next_parent, None, None
-
-
+                        if not next_head:
+                            next_head = child
+                        else:
+                            prev_child.next = child
+                        prev_child = child
+                head = head.next
+            head = next_head
 
 
 # BFS
@@ -62,6 +55,5 @@ class Solution:
                 if node.right:
                     next_level.append(node.right)
             level = next_level
-
 
 

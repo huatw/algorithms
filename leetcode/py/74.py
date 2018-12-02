@@ -1,31 +1,27 @@
+# log(M) + log(N)
 class Solution:
     def searchMatrix(self, matrix, target):
         if not matrix or not matrix[0]:
             return False
+        M, N = len(matrix), len(matrix[0])
 
-        lo, hi = 0, len(matrix) - 1
-
+        lo, hi = 0, M - 1
         while lo < hi:
             mid = lo + (hi - lo) // 2
-            if matrix[mid][0] > target:
+            if target > matrix[mid][-1]:
+                lo = mid + 1
+            elif target < matrix[mid][0]:
                 hi = mid - 1
-            elif mid < len(matrix) - 1 and matrix[mid + 1][0] > target:
+            else:
                 lo = mid
                 break
-            else:
-                lo = mid + 1
 
         row = matrix[lo]
-
-        lo, hi = 0, len(row) - 1
-
-        while lo <= hi:
+        lo, hi = 0, N - 1
+        while lo < hi:
             mid = lo + (hi - lo) // 2
-            if row[mid] == target:
-                return True
-            if row[mid] > target:
-                hi = mid - 1
-            else:
+            if target > row[mid]:
                 lo = mid + 1
-
-        return False
+            else:
+                hi = mid
+        return row[lo] == target

@@ -1,29 +1,29 @@
 # logN * logN
+def with_cache(fn):
+    cache = {}
+    def wrapper(node):
+        if node not in cache:
+            cache[node] = fn(node)
+        return cache[node]
+    return wrapper
+
 class Solution:
     def countNodes(self, root):
-        if not root:
-            return 0
-        l_depth = self.calDepth(root.left)
-        r_depth = self.calDepth(root.right, False)
+        @with_cache
+        def dfs_left(node):
+            return 1 + dfs_left(node.left) if node else 0
 
-        if l_depth == r_depth:
-            return 2 ** (l_depth + 1) - 1
+        @with_cache
+        def dfs_right(node):
+            return 1 + dfs_right(node.right) if node else 0
 
-        return 1 + self.countNodes(root.left) + self.countNodes(root.right)
+        def recur(node):
+            if not node:
+                return 0
 
-    def calDepth(self, root, isLeft = True):
-        if not root:
-            return 0
+            left_height, right_height = dfs_left(node.left), dfs_right(node.right)
+            if left_height == right_height:
+                return 2 ** (left_height + 1) - 1
+            return 1 + recur(node.left) + recur(node.right)
 
-        depth = 1
-        if isLeft:
-            while root.left:
-                depth += 1
-                root = root.left
-        else:
-            while root.right:
-                depth += 1
-                root = root.right
-
-        return depth
-
+        return recur(root)

@@ -48,4 +48,33 @@ class Solution:
             root = root.left
 
 
+# bfs O(1)
+class Solution:
+    def connect(self, root):
+        def bfs(head):
+            if not head or not head.left:
+                return
+            cur = head
+            while cur:
+                left, right = cur.left, cur.right
+                cur = cur.next
+                left.next = right
+                if cur:
+                    right.next = cur.left
+            bfs(head.left) # tail
 
+        bfs(root)
+
+
+class Solution:
+    def connect(self, root):
+        head = root
+        while head and head.left:
+            cur = head
+            while cur:
+                left, right = cur.left, cur.right
+                cur = cur.next
+                left.next = right
+                if cur:
+                    right.next = cur.left
+            head = head.left

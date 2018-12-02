@@ -1,3 +1,23 @@
+class Solution:
+    def trap(self, heights):
+        if not heights:
+            return 0
+
+        res = 0
+        lo, hi = 0, len(heights) - 1
+        left_bound, right_bound = heights[lo], heights[hi]
+
+        while lo < hi:
+            left_bound, right_bound = max(left_bound, heights[lo]), max(right_bound, heights[hi])
+            if left_bound < right_bound:
+                res += max(0, left_bound - heights[lo + 1])
+                lo += 1
+            else:
+                res += max(0, right_bound - heights[hi - 1])
+                hi -= 1
+
+        return res
+
 # thought:
 # Input: [0,1,0,2,1,0,1,3,2,1,2,1]
 #             ^   ^ ^ ^     ^
@@ -10,14 +30,12 @@ class Solution:
 
         while lo < hi:
             if height[lo] < height[hi]:
-                # move lo
                 left_bound = height[lo]
                 lo += 1
                 while height[lo] < left_bound:
                     water += left_bound - height[lo]
                     lo += 1
             else:
-                # move hi
                 right_bound = height[hi]
                 hi -= 1
                 while height[hi] < right_bound:

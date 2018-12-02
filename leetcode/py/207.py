@@ -1,25 +1,24 @@
+# topo
 class Solution:
-    def canFinish(self, numCourses, prerequisites):
+    def canFinish(self, num_courses, prerequisites):
         first_seconds_map = collections.defaultdict(list)
-        dep_cnt_map = collections.defaultdict(int)
-
-        for (first, second) in prerequisites:
+        second_cnt_map = collections.defaultdict(int)
+        for second, first in prerequisites:
             first_seconds_map[first].append(second)
-            dep_cnt_map[second] += 1
-            if first not in dep_cnt_map:
-                dep_cnt_map[first] = 0
+            second_cnt_map[second] += 1
 
-        level = [course for (course, dep_cnt) in dep_cnt_map.items() if dep_cnt == 0]
+        first_courses = [course for course in range(num_courses) if course not in second_cnt_map]
+        learned_total = len(first_courses)
 
-        while level:
-            first = level.pop()
+        while first_courses:
+            first = first_courses.pop()
             for second in first_seconds_map[first]:
-                dep_cnt_map[second] -= 1
-                if dep_cnt_map[second] == 0:
-                    level.append(second)
+                second_cnt_map[second] -= 1
+                if second_cnt_map[second] == 0:
+                    learned_total += 1
+                    first_courses.append(second)
 
-        return all(cnt == 0 for cnt in dep_cnt_map.values())
-
+        return learned_total == num_courses
 
 # BFS
 class Solution:

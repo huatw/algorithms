@@ -1,3 +1,28 @@
+class Solution:
+    def alienOrder(self, words):
+        CHS = set(''.join(words))
+        first_second_map = collections.defaultdict(set)
+        second_first_map = collections.defaultdict(set)
+        for (prev_word, next_word) in zip(words, words[1:]):
+            for (prev_ch, next_ch) in zip(prev_word, next_word):
+                if prev_ch != next_ch:
+                    first_second_map[prev_ch].add(next_ch)
+                    second_first_map[next_ch].add(prev_ch)
+                    break
+        free_chs = CHS - set(second_first_map)
+        order = ''
+        while free_chs:
+            first = free_chs.pop()
+            order += first
+            for second in first_second_map[first]:
+                second_first_map[second].discard(first)
+                if not second_first_map[second]:
+                    free_chs.add(second)
+        return order if len(order) == len(CHS) else ''
+
+
+
+
 import heapq, collections
 
 class Solution:

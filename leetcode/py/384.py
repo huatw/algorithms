@@ -15,10 +15,3 @@ class Solution:
             self.nums[idx], self.nums[i - 1] = self.nums[i - 1], self.nums[idx]
 
         return self.nums
-
-
-
-# Your Solution object will be instantiated and called as such:
-# obj = Solution(nums)
-# param_1 = obj.reset()
-# param_2 = obj.shuffle()
