@@ -1,35 +1,37 @@
 class Solution:
     def findWords(self, board, words):
-        trie = {}
-        ret = set()
+        M, N = len(board), len(board[0])
+        def get_neighbors(x, y):
+            DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+            for dx, dy in DIRECTIONS:
+                nx, ny = x + dx, y + dy
+                if M > nx >= 0 and N > ny >= 0:
+                    yield (nx, ny)
 
+        def build_trie(words):
+            trie = {}
+            for word in words:
+                node = trie
+                for ch in word:
+                    if ch not in node:
+                        node[ch] = {}
+                    node = node[ch]
+                node['$'] = True
+            return trie
 
-        def dfs(x, y, t, path):
-            if '$' in t:
-                ret.add(path)
-
-            if x < 0 or y < 0 or x >= len(board) or y >= len(board[0]) or board[x][y] not in t:
+        def dfs(x, y, node, path, seen):
+            if (x, y) in seen:
                 return
+            seen.add((x, y))
+            for next_ch, next_node in node.items():
+                if board[x][y] == next_ch:
+                    path.append(next_ch)
+                    if '$' in next_node:
+                        yield ''.join(path)
+                    for nx, ny in get_neighbors(x, y):
+                        yield from dfs(nx, ny, next_node, path, seen)
+                    path.pop()
+            seen.remove((x, y))
 
-            temp = board[x][y]
-            board[x][y] = None
-
-            for dx, dy in ((0,1), (0,-1), (1,0), (-1,0)):
-                dfs(x + dx, y + dy, t[temp], path + temp)
-
-            board[x][y] = temp
-
-
-        for word in words:
-            t = trie
-            for ch in word:
-                if ch not in t:
-                    t[ch] = {}
-                t = t[ch]
-            t['$'] = True
-
-        for x, row in enumerate(board):
-            for y, el in enumerate(row):
-                dfs(x, y, trie, '')
-
-        return list(ret)
+        trie = build_trie(words)
+        return list(set(word for i in range(M) for j in range(N) for word in dfs(i, j, trie, [], set())))

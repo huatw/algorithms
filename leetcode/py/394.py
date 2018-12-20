@@ -1,8 +1,100 @@
-'''
-s = "3[a]2[bc]", return "aaabcbc".
-s = "3[a2[c]]", return "accaccacc".
-s = "2[abc]3[cd]ef", return "abcabccdcdcdef".
-'''
+class Solution:
+    def decodeString(self, s):
+        def tokenize(s):
+            tokens = []
+            nums, chs = '', ''
+            for ch in s:
+                if ch.isdigit():
+                    nums += ch
+                elif ch in '[]':
+                    if chs:
+                        tokens.append(chs)
+                        chs = ''
+                    if nums:
+                        tokens.append(nums)
+                        nums = ''
+                    tokens.append(ch)
+                else:
+                    chs += ch
+            if chs:
+                tokens.append(chs)
+            return tokens
+
+        def parse(tokens):
+            stacks = [[]]
+            for token in tokens:
+                if token == '[':
+                    stacks.append([])
+                elif token == ']':
+                    sub_stack = stacks.pop()
+                    cnt = stacks[-1].pop()
+                    stacks[-1].append((cnt, sub_stack))
+                else:
+                    stacks[-1].append(token)
+            return stacks[-1]
+
+        def expand(ast):
+            res = []
+            for item in ast:
+                if isinstance(item, tuple):
+                    cnt, stack = item
+                    res.append(int(cnt) * expand(stack))
+                else:
+                    res.append(item)
+            return ''.join(res)
+
+        tokens = tokenize(s)
+        ast = parse(tokens)
+        res = expand(ast)
+        return res
+
+
+
+
+class Solution:
+    def decodeString(self, s):
+        def tokenize(s):
+            tokens = []
+            nums, chs = '', ''
+            for ch in s:
+                if ch.isdigit():
+                    nums += ch
+                elif ch in '[]':
+                    if chs:
+                        tokens.append(chs)
+                        chs = ''
+                    if nums:
+                        tokens.append(nums)
+                        nums = ''
+                    tokens.append(ch)
+                else:
+                    chs += ch
+            if chs:
+                tokens.append(chs)
+            return tokens
+
+        def parse(tokens):
+            ast = [[]]
+            for token in tokens:
+                if token.isdigit():
+                    ast[-1].append([token, ''])
+                elif token == '[':
+                    ast.append([])
+                elif token == ']':
+                    ast[-1][-1][1] = ast.pop()
+                else:
+                    ast[-1].append([1, token])
+            return ast[-1]
+
+        def gen_s(ast):
+            return ''.join(int(cnt) * (val if isinstance(val, str) else gen_s(val)) for cnt, val in ast)
+
+        tokens = tokenize(s)
+        ast = parse(tokens)
+        res = gen_s(ast)
+
+        return res
+
 
 class Solution:
     def decodeString(self, s):
@@ -22,46 +114,4 @@ class Solution:
                 stack[-1][0] += ch
 
         return stack[0][0]
-
-class Solution:
-    def decodeString(self, s):
-        stack = []
-        cnt = ''
-        chs = ''
-        bracket_cnt = 0
-
-        for ch in s:
-            if bracket_cnt > 0: # recursive parse
-                chs += ch
-                if ch == '[':
-                    bracket_cnt += 1
-                elif ch == ']':
-                    bracket_cnt -= 1
-                    if bracket_cnt == 0:
-                        stack.append(int(cnt))
-                        stack.append(self.decodeString(chs[:-1]))
-                        cnt = ''
-                        chs = ''
-            elif ch.isdigit(): # digit mode
-                if chs:
-                    stack.append(1)
-                    stack.append(chs)
-                    cnt = ''
-                    chs = ''
-                cnt += ch
-            elif ch == '[':
-                bracket_cnt += 1
-            else:
-                chs += ch
-
-        if chs:
-            stack.append(1)
-            stack.append(chs)
-
-        res = ''
-        for i in range(0, len(stack), 2):
-            res += stack[i] * stack[i + 1]
-
-        return res
-
 

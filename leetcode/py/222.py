@@ -1,19 +1,19 @@
 # logN * logN
-def with_cache(fn):
-    cache = {}
-    def wrapper(node):
-        if node not in cache:
-            cache[node] = fn(node)
-        return cache[node]
-    return wrapper
+# def with_cache(fn):
+#     cache = {}
+#     def wrapper(node):
+#         if node not in cache:
+#             cache[node] = fn(node)
+#         return cache[node]
+#     return wrapper
 
 class Solution:
     def countNodes(self, root):
-        @with_cache
+        @functools.lru_cache(None)
         def dfs_left(node):
             return 1 + dfs_left(node.left) if node else 0
 
-        @with_cache
+        @functools.lru_cache(None)
         def dfs_right(node):
             return 1 + dfs_right(node.right) if node else 0
 

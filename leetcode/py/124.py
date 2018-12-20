@@ -6,8 +6,7 @@ class Solution:
             if not node:
                 return 0
 
-            left = max(0, recur(node.left))
-            right = max(0, recur(node.right))
+            left, right = max(0, recur(node.left)), max(0, recur(node.right))
 
             self.ret = max(self.ret, left + right + node.val)
 

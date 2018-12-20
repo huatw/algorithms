@@ -1,26 +1,22 @@
-# UF
 class UnionFind:
     def __init__(self):
         self.m = {}
-    def add(self, n1, n2):
-        if n1 in self.m:
-            self.m[n2] = n1
-        elif n2 in self.m:
-            self.m[n1] = n2
-        else:
-            self.m[n1] = n2
-            self.m[n2] = n2
-        return True
-    def add_union(self, n1, n2):
-        if n1 in self.m and n2 in self.m:
-            return self.union(n1, n2)
-        return self.add(n1, n2)
+
     def union(self, n1, n2):
-        r1, r2 = self.find(n1), self.find(n2)
-        if r1 == r2:
-            return False
-        self.m[r1] = r2
+        if n1 not in self.m and n2 not in self.m:
+            self.m[n1] = n1
+            self.m[n2] = n1
+        elif n1 not in self.m:
+            self.m[n1] = n2
+        elif n2 not in self.m:
+            self.m[n2] = n1
+        else:
+            r1, r2 = self.find(n1), self.find(n2)
+            if r1 == r2:
+                return False
+            self.m[r1] = r2
         return True
+
     def find(self, n):
         if self.m[n] != n:
             self.m[n] = self.find(self.m[n])
@@ -28,7 +24,7 @@ class UnionFind:
 
 class Solution:
     def findRedundantDirectedConnection(self, edges):
-        def has_cycle(end_start_map, start, end):
+        def has_cycle(start, end, end_start_map):
             while start in end_start_map:
                 start = end_start_map[start]
                 if end == start:
@@ -36,21 +32,20 @@ class Solution:
             return False
 
         candidates = []
-        end_start_map = {}
-        for (start, end) in edges:
-            if end in end_start_map:
-                candidates.append((end_start_map[end], end))
-                candidates.append((start, end))
+        end_starts_map = {}
+        for start, end in edges:
+            if end in end_starts_map:
+                candidates = [(end_starts_map[end], end), (start, end)]
             else:
-                end_start_map[end] = start
+                end_starts_map[end] = start
+
         if candidates:
-            return candidates[0] if has_cycle(end_start_map, *candidates[0]) else candidates[1]
+            return candidates[0] if has_cycle(*candidates[0], end_starts_map) else candidates[1]
 
         uf = UnionFind()
-        for (start, end) in edges:
-            if not uf.add_union(start, end):
+        for start, end in edges:
+            if not uf.union(start, end):
                 return [start, end]
-
 
 
 

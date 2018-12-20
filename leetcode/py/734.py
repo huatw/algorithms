@@ -3,11 +3,12 @@ class Solution:
         if len(words1) != len(words2):
             return False
 
-        synonym_map = collections.defaultdict(set)
-        for word1, word2 in pairs:
-            synonym_map[word1].add(word2)
+        word_map = collections.defaultdict(set)
+        for w1, w2 in pairs:
+            word_map[w1].add(w2)
 
-        for (word1, word2) in zip(words1, words2):
-            if word1 != word2 and word2 not in synonym_map[word1] and word1 not in synonym_map[word2]:
-                return False
-        return True
+        def is_same(w1, w2):
+            return w1 == w2 or w2 in word_map[w1] or w1 in word_map[w2]
+
+        return all(is_same(w1, w2) for w1, w2 in zip(words1, words2))
+

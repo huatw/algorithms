@@ -41,3 +41,33 @@ class Solution:
             return ret
 
         return concat_words(-1)
+
+
+# DFS with cache
+class Solution:
+    def wordBreak(self, s, words):
+        def with_cache(fn):
+            cache = {}
+            def wrapper(start):
+                if start not in cache:
+                    cache[start] = fn(start)
+                return cache[start]
+            return wrapper
+
+        @with_cache
+        def search(idx):
+            if idx == len(s):
+                return [[]]
+
+            res = []
+            for i in range(idx + 1, len(s) + 1):
+                word = s[idx:i]
+                if word in word_set:
+                    for ws in search(i):
+                        res.append([word] + ws)
+            return res
+
+        word_set = set(words)
+        return [' '.join(ws) for ws in search(0)]
+
+

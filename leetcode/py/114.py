@@ -1,29 +1,21 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
 class Solution:
     def flatten(self, root):
         def recur(node, next_node):
             if not node:
                 return next_node
-            if node.left and not node.right:
+            elif not node.left and not node.right:
+                node.right = next_node
+            elif not node.left:
+                node.right = recur(node.right, next_node)
+            elif not node.right:
                 node.right = recur(node.left, next_node)
                 node.left = None
-            elif not node.left and node.right:
-                recur(node.right, next_node)
-            elif node.left and node.right:
+            else:
                 node.right = recur(node.left, recur(node.right, next_node))
                 node.left = None
-            else:
-                node.right = next_node
             return node
 
         recur(root, None)
-
 
 
 class Solution:

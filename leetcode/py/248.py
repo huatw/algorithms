@@ -8,9 +8,7 @@ class Solution:
             '8': '8',
             '0': '0'
         }
-
         res = []
-
         def recur(idx, rest, acc):
             if rest == 0:
                 res.append(''.join(acc))
@@ -25,15 +23,10 @@ class Solution:
                     recur(idx + 1, rest - 2, acc)
 
         recur(0, n, [''] * n)
-
         return res
 
     def strobogrammaticInRange(self, low, high):
         if int(low) > int(high):
             return 0
-        res = 0
-        for n in range(len(low), len(high) + 1):
-            for val in self.findStrobogrammatic(n):
-                if int(high) >= int(val) >= int(low):
-                    res += 1
-        return res
+        is_in_range = lambda val: int(high) >= int(val) >= int(low)
+        return sum(is_in_range(val) for n in range(len(low), len(high) + 1) for val in self.findStrobogrammatic(n))

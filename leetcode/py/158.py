@@ -12,6 +12,30 @@ read("abc", 1); // returns ""
 class Solution:
     def __init__(self):
         self.last_buf = [None] * 4
+        self.last_idx = 0
+        self.last_size = 0
+
+    def read(self, buf, n):
+        idx = 0
+        while idx < n:
+            while idx < n and self.last_idx < self.last_size:
+                buf[idx] = self.last_buf[self.last_idx]
+                self.last_idx += 1
+                idx += 1
+            if idx == n:
+                break
+            self.last_size = read4(self.last_buf)
+            if self.last_size == 0:
+                break
+            self.last_idx = 0
+        return idx
+
+
+
+
+class Solution:
+    def __init__(self):
+        self.last_buf = [None] * 4
         self.last_pointer = 0
         self.last_size = 0
 

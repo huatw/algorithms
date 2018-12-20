@@ -3,13 +3,14 @@ class Solution:
     def findRadius(self, houses, heaters):
         heaters = sorted(heaters)
 
-        r = 0
-        for h in houses:
-            idx = bisect.bisect_left(heaters, h)
-            if idx == len(heaters):
-                r = max(r, h - heaters[idx - 1])
-            elif idx == 0:
-                r = max(r, heaters[idx] - h)
+        res = 0
+        for house in houses:
+            if house <= heaters[0]:
+                res = max(res, heaters[0] - house)
+            elif house >= heaters[-1]:
+                res = max(res, house - heaters[-1])
             else:
-                r = max(r, min(heaters[idx] - h, h - heaters[idx - 1]))
-        return r
+                idx = bisect.bisect(heaters, house)
+                res = max(res, min(heaters[idx] - house, house - heaters[idx - 1]))
+        return res
+

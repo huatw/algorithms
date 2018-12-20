@@ -1,3 +1,25 @@
+class Solution:
+    def expressiveWords(self, target, words):
+        def parse(word):
+            stack = []
+            token, cnt = '', 0
+            for ch in word:
+                if token == ch:
+                    cnt += 1
+                else:
+                    stack.append((token, cnt))
+                    token, cnt = ch, 1
+            stack.append((token, cnt))
+            return stack
+
+        def is_extension(t, word):
+            if len(t) != len(word):
+                return False
+            return all(ch_t == ch_w and (cnt_t == cnt_w or (cnt_t > cnt_w and cnt_t >= 3)) \
+                for (ch_t, cnt_t), (ch_w, cnt_w) in zip(t, word))
+
+        target = parse(target)
+        return sum(is_extension(target, parse(word)) for word in words)
 '''
 Input:
 S = "heeellooo"

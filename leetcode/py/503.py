@@ -1,3 +1,17 @@
+class Solution:
+    def nextGreaterElements(self, nums):
+        res = []
+        biggest = []
+
+        for num in reversed(nums * 2):
+            while biggest and biggest[-1] <= num:
+                biggest.pop()
+            res.append(biggest[-1] if biggest else -1)
+            biggest.append(num)
+
+        return res[len(nums):][::-1]
+
+
 # map
 class Solution:
     def nextGreaterElements(self, nums):

@@ -1,58 +1,55 @@
-'''
-[aa, bb, cc]
-'aa bb cc ?'
-'''
 class Solution:
-    def fullJustify(self, words, max_width):
-        def will_overflow(cur_words, cur_len, word):
-            return len(cur_words) + cur_len + len(word) > max_width
-
-        def gen_line(cur_words, cur_len):
-            nspaces = len(cur_words) - 1 if len(cur_words) > 1 else 1
-            for i in range(max_width - cur_len):
-                cur_words[i % nspaces] += ' '
-            return ''.join(cur_words)
+    def fullJustify(self, words, MAX_WIDTH):
+        will_overflow = lambda text_len, space_len: text_len + space_len > MAX_WIDTH
+        def calc_line(line_words, line_width):
+            nspaces = len(line_words) - 1 if len(line_words) > 1 else 1
+            for i in range(MAX_WIDTH - line_width):
+                line_words[i % nspaces] += ' '
+            return ''.join(line_words)
 
         res = []
-        cur_len, cur_words = 0, []
+        line_words, line_width = [], 0
 
         for word in words:
-            if will_overflow(cur_words, cur_len, word):
-                res.append(gen_line(cur_words, cur_len))
-                cur_len, cur_words = 0, []
-            cur_words.append(word)
-            cur_len += len(word)
+            # check if add word will overflow
+            if will_overflow(len(word) + line_width, len(line_words)):
+                # calc current line
+                res.append(calc_line(line_words, line_width))
+                # reset
+                line_words, line_width = [], 0
+            line_words.append(word)
+            line_width += len(word)
 
-        return res + [' '.join(cur_words).ljust(max_width)]
+        return res + [' '.join(line_words).ljust(MAX_WIDTH)]
 
 
-比如第一行最后面本来放不下, 现在可以把下一个单词拆分, 要求是至少俩字符, 并要加一个-连接符。
-# split word if word
 class Solution:
-    def fullJustify(self, words, max_width):
-        def will_overflow(cur_words, cur_len, word):
-            return len(cur_words) + cur_len + len(word) > max_width
+    def fullJustify(self, words, MAX_WIDTH):
+        will_overflow = lambda text_len, space_len: text_len + space_len > MAX_WIDTH
 
-        def gen_line(cur_words, cur_len, word):
-            if len(word) == 1:
-                nspaces = len(cur_words) - 1 if len(cur_words) > 1 else 1
-                for i in range(max_width - cur_len):
-                    cur_words[i % nspaces] += ' '
-                return word, ''.join(cur_words)
+        def calc_line(word, line_words, line_width):
+            if not will_overflow(line_width + 2, len(line_words)):
+                idx = MAX_WIDTH - len(line_words) - line_width - 1
+                left_word, right_word = word[:idx], word[idx:]
+                return right_word, ' '.join(line_words + [left_word + '-'])
             else:
-                idx = max_width - cur_len - len(cur_words) - 1
-                left, right = word[:idx], word[idx:]
-                return right, ' '.join(cur_words + [left + '-'])
+                nspaces = len(line_words) - 1 if len(line_words) > 1 else 1
+                for i in range(MAX_WIDTH - line_width):
+                    line_words[i % nspaces] += ' '
+                return word, ''.join(line_words)
 
         res = []
-        cur_len, cur_words = 0, []
+        line_words, line_width = [], 0
 
         for word in words:
-            if will_overflow(cur_words, cur_len, word):
-                word, line = gen_line(cur_words, cur_len, word)
+            # check if add word will overflow
+            while will_overflow(len(word) + line_width, len(line_words)):
+                # calc current line
+                word, line = calc_line(word, line_words, line_width)
                 res.append(line)
-                cur_len, cur_words = 0, []
-            cur_words.append(word)
-            cur_len += len(word)
+                # reset
+                line_words, line_width = [], 0
+            line_words.append(word)
+            line_width += len(word)
 
-        return res + [' '.join(cur_words).ljust(max_width)]
+        return res + [' '.join(line_words).ljust(MAX_WIDTH)]

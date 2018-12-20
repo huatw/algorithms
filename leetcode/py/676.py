@@ -1,5 +1,28 @@
 class MagicDictionary:
     def __init__(self):
+        self.word_cnt = collections.Counter()
+        self.original = None
+
+    def buildDict(self, words):
+        self.original = set(words)
+        for word in words:
+            for i in range(len(word)):
+                self.word_cnt[word[:i] + '_' + word[i + 1:]] += 1
+
+    def search(self, word):
+        for i in range(len(word)):
+            modified = word[:i] + '_' + word[i + 1:]
+            if word in self.original:
+                if self.word_cnt[modified] > 1:
+                    return True
+            elif modified in self.word_cnt:
+                return True
+        return False
+
+
+
+class MagicDictionary:
+    def __init__(self):
         self.trie = {}
 
     def buildDict(self, words):
@@ -12,18 +35,13 @@ class MagicDictionary:
             node['$'] = True
 
     def search(self, word):
-        def search_word(node, word, cnt):
-            if cnt == 1:
-                for ch in word:
-                    if ch not in node:
-                        return False
-                    node = node[ch]
-                return '$' in node
-            # 1. match and search
-            # 2. not match and search
-            for ch, next_node in node.items():
-                if ch != '$' and word and search_word(node[ch], word[1:], cnt if ch == word[0] else cnt + 1):
-                    return True
-            return False
-        return search_word(self.trie, word, 0)
+        def dfs(node, idx, cnt):
+            if cnt > 1:
+                return False
+            if idx == len(word):
+                return '$' in node and cnt == 1
+            return any(dfs(next_node, idx + 1, cnt if word[idx] == ch else cnt + 1) \
+                        for ch, next_node in node.items() if ch != '$')
+
+        return dfs(self.trie, 0, 0)
 

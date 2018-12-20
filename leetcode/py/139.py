@@ -1,55 +1,73 @@
 # DP IMPORTANT
-class Solution(object):
-    def wordBreak(self, s, wordDict):
-        wordSet = set(wordDict)
-        res = [False] * (len(s)+1)
+class Solution:
+    def wordBreak(self, s, words):
+        word_set = set(words)
+        res = [False] * (len(s) + 1)
         res[0] = True
 
-        for i in range(1, len(s)+1):
+        for i in range(1, len(s) + 1):
             for j in range(i):
-                if s[j:i] in wordSet and res[j]:
+                if s[j:i] in word_set and res[j]:
                     res[i] = True
                     break
 
         return res[-1]
 
+
 # Tire tree with cache
-class Solution(object):
-    def wordBreak(self, s, wordDict):
-        tire = {}
+class Solution:
+    def wordBreak(self, s, words):
+        def with_cache(fn):
+            cache = {}
+            def wrapper(start, end, trie):
+                if (start, end) not in cache:
+                    cache[(start, end)] = fn(start, end, trie)
+                return cache[(start, end)]
+            return wrapper
 
-        for word in wordDict:
-            level = tire
+        def build_trie(words):
+            trie = {}
+            for word in words:
+                node = trie
+                for ch in word:
+                    if ch not in node:
+                        node[ch] = {}
+                    node = node[ch]
+                node['$'] = True
+            return trie
 
-            for ch in word:
-                if ch not in level:
-                    level[ch] = {}
-                level = level[ch]
-
-            level['$'] = True
-
-        cache = {}
-
-        def search(start, end):
-            word = s[start:end]
-            if word in cache:
-                return cache[word]
-
-            level = tire
-
+        @with_cache
+        def search(start, end, trie):
+            node = trie
             for i in range(start, end):
-                if '$' in level and search(i, end):
-                    cache[word] = True
+                if '$' in node and search(i, end, trie):
                     return True
-                if s[i] not in level:
-                    cache[word] = False
+                if s[i] not in node:
                     return False
-                level = level[s[i]]
+                node = node[s[i]]
+            return '$' in node
 
-            cache[word] = '$' in level
-            return '$' in level
+        return search(0, len(s), build_trie(words))
 
 
-        return search(0, len(s))
+
+
+class Solution:
+    def wordBreak(self, s, words):
+        def with_cache(fn):
+            cache = {}
+            def wrapper(start):
+                if start not in cache:
+                    cache[start] = fn(start)
+                return cache[start]
+            return wrapper
+
+        @with_cache
+        def search(idx):
+            if idx == len(s):
+                return True
+            return any(search(i) for i in range(idx + 1, len(s) + 1) if s[idx:i] in word_set)
+        word_set = set(words)
+        return search(0)
 
 

@@ -1,8 +1,3 @@
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
 class Solution:
     def addTwoNumbers(self, l1, l2):
         len1, len2 = self.get_len(l1), self.get_len(l2)
@@ -41,41 +36,42 @@ class Solution:
 
         return l_len
 
-
-
-# naive one
 class Solution:
     def addTwoNumbers(self, l1, l2):
-        str1, str2 = [], []
+        if not l1 or not l2:
+            return l1 or l2
 
-        while l1:
-            str1.append(l1.val)
-            l1 = l1.next
+        cur = l1
+        stack1 = []
+        while cur:
+            stack1.append(cur)
+            cur = cur.next
 
-        while l2:
-            str2.append(l2.val)
-            l2 = l2.next
+        cur = l2
+        stack2 = []
+        while cur:
+            stack2.append(cur)
+            cur = cur.next
 
-        len1, len2 = len(str1), len(str2)
-        if len1 < len2:
-            str1 = [0] * (len2 - len1) + str1
-        if len1 > len2:
-            str2 = [0] * (len1 - len2) + str2
+        stack1, stack2 = stack1[::-1], stack2[::-1]
+        if len(stack2) > len(stack1):
+            stack1, stack2 = stack2, stack1
 
+        res = []
         tenth = 0
-        ret = None
-        for i in range(1, max(len1, len2) + 1):
-            digit = str1[-i] + str2[-i] + tenth
-            tenth = digit // 10
-            digit = digit % 10
+        for n1, n2 in zip(stack1, stack2):
+            tenth, digit = divmod(n1.val + n2.val + tenth, 10)
+            res.append(ListNode(digit))
 
-            node = ListNode(digit)
-            node.next = ret
-            ret = node
+        for n in stack1[len(stack2):]:
+            tenth, digit = divmod(n.val + tenth, 10)
+            res.append(ListNode(digit))
 
         if tenth:
-            node = ListNode(tenth)
-            node.next = ret
-            ret = node
+            res.append(ListNode(tenth))
 
-        return ret
+        res = res[::-1]
+        for prev_node, next_node in zip(res, res[1:]):
+            prev_node.next = next_node
+
+        return res[0]

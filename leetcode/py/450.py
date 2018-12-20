@@ -1,6 +1,29 @@
 class Solution:
     def deleteNode(self, root, key):
-        if root == None:
+        if not root:
+            return
+
+        if root.val > key:
+            root.left = self.deleteNode(root.left, key)
+            return root
+        elif root.val < key:
+            root.right = self.deleteNode(root.right, key)
+            return root
+        elif not root.left:
+            return root.right
+        elif not root.right:
+            return root.left
+        else:
+            cur = root.left
+            while cur.right:
+                cur = cur.right
+            cur.right = root.right
+            return root.left
+
+
+class Solution:
+    def deleteNode(self, root, key):
+        if not root:
             return
 
         if root.val > key:
@@ -10,15 +33,12 @@ class Solution:
             root.right = self.deleteNode(root.right, key)
             return root
         else:
-            if root.right and root.left:
-                connect_node = root.right
-                while connect_node and connect_node.left:
-                    connect_node = connect_node.left
-                connect_node.left = root.left
+            left, right = root.left, root.right
+            if left and right:
+                cur = root.right
+                while cur.left:
+                    cur = cur.left
+                cur.left = left
                 return root.right
-            elif root.left:
-                return root.left
-            elif root.right:
-                return root.right
-            else:
-                return None
+            return left or right
+

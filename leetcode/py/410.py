@@ -1,59 +1,39 @@
+# binary search
 class Solution:
-    def splitArray(self, nums, m):
+    def splitArray(self, nums, k):
+        def check(mid):
+            cnt = 0
+            cur_sum = 0
+            for n in nums:
+                if cur_sum + n > mid:
+                    cur_sum = 0
+                    cnt += 1
+                    if cnt >= k:
+                        return False
+                cur_sum += n
+            return True
 
+        lo, hi = max(nums), sum(nums)
 
-class Solution {
-public:
-    int splitArray(vector<int>& nums, int m) {
-        int n = nums.size();
-        vector<vector<int>> f(n + 1, vector<int>(m + 1, INT_MAX));
-        vector<int> sub(n + 1, 0);
-        for (int i = 0; i < n; i++) {
-            sub[i + 1] = sub[i] + nums[i];
-        }
-        f[0][0] = 0;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                for (int k = 0; k < i; k++) {
-                    f[i][j] = min(f[i][j], max(f[k][j - 1], sub[i] - sub[k]));
-                }
-            }
-        }
-        return f[n][m];
-    }
-};
+        while lo < hi:
+            mid = lo + (hi - lo) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid + 1
+        return lo
 
-class Solution {
-    public int splitArray(int[] nums, int m) {
-        long l = 0;
-        long r = 0;
-        int n = nums.length;
-        for (int i = 0; i < n; i++) {
-            r += nums[i];
-            if (l < nums[i]) {
-                l = nums[i];
-            }
-        }
-        long ans = r;
-        while (l <= r) {
-            long mid = (l + r) >> 1;
-            long sum = 0;
-            int cnt = 1;
-            for (int i = 0; i < n; i++) {
-                if (sum + nums[i] > mid) {
-                    cnt ++;
-                    sum = nums[i];
-                } else {
-                    sum += nums[i];
-                }
-            }
-            if (cnt <= m) {
-                ans = Math.min(ans, mid);
-                r = mid - 1;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return (int)ans;
-    }
-}
+# DP
+# f[i][j] = max(f[k][j - 1], nums[k + 1] + ... + nums[i])
+class Solution:
+    def splitArray(self, nums, k):
+        N = len(nums)
+        dp = [[float('inf')] * (k + 1) for _ in range(N + 1)]
+        acc = [0] + list(itertools.accumulate(nums))
+        dp[0][0] = 0
+        for i in range(1, N + 1): # 0 - i
+            for j in range(1, k + 1): # j part
+                for idx in range(i): # 0 - idx, j - 1 part; idx - i, 1 pary
+                    dp[i][j] = min(dp[i][j], max(dp[idx][j - 1], acc[i] - acc[idx]))
+
+        return dp[-1][-1]

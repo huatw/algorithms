@@ -1,8 +1,4 @@
 class Solution:
-    """
-    @param nums: a list of integers
-    @return: return an integer
-    """
     def pathSum(self, nums):
         arr = [None] * 31
         cnts = [0, 1, 3, 7, 15]

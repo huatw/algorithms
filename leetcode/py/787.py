@@ -1,22 +1,17 @@
 class Solution:
     def findCheapestPrice(self, n, flights, src, dst, K):
-        m = collections.defaultdict(dict)
-        for start, end, price in flights:
-            m[start][end] = price
+        f_t_map = collections.defaultdict(list)
+        for f, t, price in flights:
+            f_t_map[f].append((t, price))
 
-        res = {src: 0}
-        nowMin = float('inf')
-        for _ in range(K + 1):
-            newRes = collections.defaultdict(lambda: float('inf'), res)
-            for start, total_price in res.items():
-                for end, price in m[start].items():
-                    if total_price + price < nowMin:
-                        newRes[end] = min(total_price + price, newRes[end])
-                        if end == dst:
-                            nowMin = newRes[end]
-
-            res = newRes
-
-        return nowMin if nowMin != float('inf') else -1
-
+        hq = [(0, src, 0)]
+        while hq:
+            acc_price, f, k = heapq.heappop(hq)
+            if f == dst:
+                return acc_price
+            if k > K:
+                continue
+            for t, price in f_t_map[f]:
+                heapq.heappush(hq, (acc_price + price, t, k + 1))
+        return -1
 

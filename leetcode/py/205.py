@@ -1,5 +1,3 @@
-import collections
-
 class Solution:
     def isIsomorphic(self, s, t):
         if len(s) != len(t):
@@ -11,12 +9,10 @@ class Solution:
             for i, ch in enumerate(chs):
                 if ch not in ch_idx_map:
                     ch_idx_map[ch] = i
-                res.append(str(ch_idx_map[ch]))
-            return ''.join(res)
+                res.append(ch_idx_map[ch])
+            return tuple(res)
 
         return normalize(s) == normalize(t)
-
-
 
 
 # len(s) + len(t)

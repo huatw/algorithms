@@ -1,14 +1,11 @@
 class Solution:
     def nextGreaterElement(self, nums1, nums2):
-        n_map = {}
-        stack = []
+        n_biggest_map = {}
+        biggest = []
+        for num in nums2[::-1]:
+            while biggest and biggest[-1] <= num:
+                biggest.pop()
+            n_biggest_map[num] = biggest[-1] if biggest else -1
+            biggest.append(num)
 
-        for n in nums2:
-            n_map[n] = -1
-
-            while stack and stack[-1] < n:
-                n_map[stack.pop()] = n
-
-            stack.append(n)
-
-        return [n_map[n] for n in nums1]
+        return [n_biggest_map[num] for num in nums1]

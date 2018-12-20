@@ -1,4 +1,5 @@
-# DFS memo
+import functools
+
 class Solution:
     def longestWord(self, words):
         len_words_map = collections.defaultdict(set)
@@ -9,21 +10,17 @@ class Solution:
         while len_words_map[max_len + 1]:
             max_len += 1
 
-        cache = {'': True}
+        @functools.lru_cache(None)
         def dfs(word):
-            if word not in cache:
-                cache[word] = word in len_words_map[len(word)] and dfs(word[:-1])
-            return cache[word]
+            return not word or (word in len_words_map[len(word)] and dfs(word[:-1]))
 
-        res = ''
         while max_len:
-            for word in len_words_map[max_len]:
+            for word in sorted(len_words_map[max_len]):
                 if dfs(word):
-                    res = min(res, word) if res else word
+                    return word
             max_len -= 1
-            if res:
-                break
-        return res
+        return ''
+
 
 
 
@@ -39,6 +36,7 @@ def build_trie(words):
             node = node[ch]
         node['$'] = True
     return trie
+
 class Solution:
     def longestWord(self, words):
         trie = build_trie(words)

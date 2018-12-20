@@ -1,21 +1,9 @@
-'''
-Input: stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]]
-Output: 5
-Example 2:
-
-Input: stones = [[0,0],[0,2],[1,1],[2,0],[2,2]]
-Output: 3
-Example 3:
-
-Input: stones = [[0,0]]
-Output: 0
-'''
 class UnionFind:
     def __init__(self):
         self.m = {}
         self.size = 0
 
-    def add_union(self, row, col):
+    def union(self, row, col):
         row, col = (row, None), (None, col)
         if row not in self.m:
             self.m[row] = row
@@ -23,14 +11,10 @@ class UnionFind:
         if col not in self.m:
             self.m[col] = col
             self.size += 1
-        self.union(row, col)
-
-    def union(self, rc1, rc2):
-        root1, root2 = self.find(rc1), self.find(rc2)
-        if root1 != root2:
+        r1, r2 = self.find(row), self.find(col)
+        if r1 != r2:
             self.size -= 1
-            self.m[root1] = root2
-
+            self.m[r1] = r2
     def find(self, rc):
         if self.m[rc] != rc:
             self.m[rc] = self.find(self.m[rc])
@@ -40,8 +24,7 @@ class Solution:
     def removeStones(self, stones):
         uf = UnionFind()
         for x, y in stones:
-            uf.add_union(x, y)
-
+            uf.union(x, y)
         return len(stones) - uf.size
 
 

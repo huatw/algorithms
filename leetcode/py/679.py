@@ -23,34 +23,6 @@ class Solution:
         return False
 
 
-class Solution:
-    def judgePoint24(self, nums):
-        if not nums:
-            return False
-
-        if len(nums) == 1:
-            return abs(nums[0] - 24) < 1e-6
-
-        for i, num1 in enumerate(nums):
-            for j, num2 in enumerate(nums):
-                if i == j:
-                    continue
-                rest = [n for k, n in enumerate(nums) if k != i and k != j]
-                vals = [num1 - num2]
-                if num2 != 0:
-                    vals.append(num1 / num2)
-                if i > j:
-                    vals.append(num1 + num2)
-                    vals.append(num1 * num2)
-                for val in vals:
-                    rest.append(val)
-                    if self.judgePoint24(rest):
-                        return True
-                    rest.pop()
-
-        return False
-
-
 from operator import truediv, mul, add, sub
 
 class Solution:

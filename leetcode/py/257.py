@@ -41,25 +41,16 @@ class Solution:
 # DFS
 class Solution:
     def binaryTreePaths(self, root):
-        paths, path = [], []
-
-        def recur(node):
+        res = []
+        def recur(node, path):
             path.append(str(node.val))
-
             if not node.left and not node.right:
-                paths.append('->'.join(path))
+                res.append('->'.join(path))
             else:
-                if node.left:
-                    recur(node.left)
-                if node.right:
-                    recur(node.right)
-
+                for next_node in [node.left, node.right]:
+                    if next_node:
+                        recur(next_node, path)
             path.pop()
-
         if root:
-            recur(root)
-
-        return paths
-
-
-
+            recur(root, [])
+        return res

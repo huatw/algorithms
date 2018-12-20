@@ -1,23 +1,19 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-'''
-Input:
+class Solution:
+    def getMinimumDifference(self, root):
+        def in_order_traversal(node):
+            if not node:
+                return
+            yield from in_order_traversal(node.left)
+            yield node.val
+            yield from in_order_traversal(node.right)
 
-   1
-    \
-     3
-    /
-   2
+        res, prev_val = float('inf'), -float('inf')
+        for val in in_order_traversal(root):
+            res, prev_val = min(res, val - prev_val), val
+        return res
 
-Output:
-1
 
-=> in order: [-5, -3, 1, 4]
-'''
+
 # O(n) O(n)
 class Solution:
     def getMinimumDifference(self, root):
@@ -33,7 +29,7 @@ class Solution:
 
         res = float('inf')
         for prev_val, next_val in zip(lst, lst[1:]):
-            res = min(res, next_val- prev_val)
+            res = min(res, next_val - prev_val)
         return res
 
 
