@@ -4,10 +4,23 @@ class Solution:
         dp = [1]
 
         for i in range(1, n + 1):
-            total = sum([dp[j] * dp[i - 1 -j] for j in range(i)])
-            dp.append(total)
+            dp.append(sum([dp[j] * dp[i - 1 - j] for j in range(i)]))
 
         return dp[-1]
+
+
+
+
+import functools
+
+class Solution:
+    def numTrees(self, n):
+        @functools.lru_cache(None)
+        def dfs(num):
+            return sum(dfs(i) * dfs(num - 1 - i) for i in range(num)) if num != 0 else 1
+
+        return dfs(n)
+
 
 '''
 state transition:

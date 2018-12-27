@@ -1,19 +1,15 @@
 class Solution:
     def isPalindrome(self, s):
-        start, end = 0, len(s)-1
+        lo, hi = 0, len(s) - 1
 
-        while start < end:
-            if not s[start].isalnum():
-                start += 1
-            elif not s[end].isalnum():
-                end -= 1
+        while lo < hi:
+            if not s[lo].isalnum():
+                lo += 1
+            elif not s[hi].isalnum():
+                hi -= 1
             else:
-                if s[start].lower() != s[end].lower():
+                if s[lo].lower() != s[hi].lower():
                     return False
-                start += 1
-                end -= 1
-
+                lo += 1
+                hi -= 1
         return True
-
-
-

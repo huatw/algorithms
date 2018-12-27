@@ -3,19 +3,15 @@ class UnionFind:
         self.m = {}
 
     def union(self, n1, n2):
-        if n1 not in self.m and n2 not in self.m:
+        if n1 not in self.m:
             self.m[n1] = n1
-            self.m[n2] = n1
-        elif n1 not in self.m:
-            self.m[n1] = n2
-        elif n2 not in self.m:
-            self.m[n2] = n1
-        else:
-            r1, r2 = self.find(n1), self.find(n2)
-            if r1 == r2:
-                return False
+        if n2 not in self.m:
+            self.m[n2] = n2
+        r1, r2 = self.find(n1), self.find(n2)
+        if r1 != r2:
             self.m[r1] = r2
-        return True
+            return True
+        return False
 
     def find(self, n):
         if self.m[n] != n:
@@ -43,9 +39,9 @@ class Solution:
             return candidates[0] if has_cycle(*candidates[0], end_starts_map) else candidates[1]
 
         uf = UnionFind()
-        for start, end in edges:
-            if not uf.union(start, end):
-                return [start, end]
+        for edge in edges:
+            if not uf.union(*edge):
+                return edge
 
 
 

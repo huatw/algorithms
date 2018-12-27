@@ -1,10 +1,13 @@
-# DP
-class Solution(object):
+class Solution:
     def climbStairs(self, n):
-        pre, now = 0, 1
+        dp = [0, 1]
+        for _ in range(n):
+            dp.append(dp[-1] + dp[-2])
+        return dp[-1]
 
-        for i in range(n):
-            pre, now = now, pre+now
-
+class Solution:
+    def climbStairs(self, n):
+        prev, now = 0, 1
+        for _ in range(n):
+            prev, now = now, prev + now
         return now
-

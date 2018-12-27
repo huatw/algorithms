@@ -1,15 +1,11 @@
-import collections
 class Solution:
     def canPermutePalindrome(self, s):
         ch_cnt_map = collections.Counter(s)
-
         has_odd = False
-
-        for (ch, cnt) in ch_cnt_map.items():
+        for cnt in ch_cnt_map.values():
             if cnt % 2 != 0:
-                if not has_odd:
-                    has_odd = True
-                else:
+                if has_odd:
                     return False
-
+                has_odd = True
         return True
+

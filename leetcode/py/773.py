@@ -1,20 +1,26 @@
+'''
+0 1 2
+3 4 5
+'''
 class Solution:
     def slidingPuzzle(self, board):
-        MOVES = [[1, 3], [0, 2, 4], [1, 5], [0, 4], [3, 1, 5], [2, 4]]
-        start = ''.join([str(ch) for row in board for ch in row])
-        seen = set([start])
-        q = collections.deque([(start, start.index('0'), 0)])
-        while q:
-            board, idx0, steps = q.popleft()
+        MOVES = ((1, 3), (0, 2, 4), (1, 5), (0, 4), (3, 1, 5), (2, 4))
+        board = ''.join(str(ch) for row in board for ch in row)
+        dq = collections.deque([(board, board.index('0'), 0)])
+        seen = set([board])
+
+        while dq:
+            board, pos, steps = dq.popleft()
             if board == '123450':
                 return steps
-            for move in MOVES[idx0]:
+
+            for move in MOVES[pos]:
                 newboard = list(board)
-                newboard[move], newboard[idx0] = newboard[idx0], newboard[move]
+                newboard[move], newboard[pos] = newboard[pos], newboard[move]
                 newboard = ''.join(newboard)
                 if newboard not in seen:
                     seen.add(newboard)
-                    q.append((newboard, move, steps + 1))
+                    dq.append((newboard, move, steps + 1))
         return -1
 
 

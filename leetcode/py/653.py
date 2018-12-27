@@ -1,5 +1,21 @@
 class Solution:
     def findTarget(self, root, k):
+        def in_order_traversal(node):
+            if not node:
+                return
+            yield from in_order_traversal(node.left)
+            yield node.val
+            yield from in_order_traversal(node.right)
+
+        seen = set()
+        for val in in_order_traversal(root):
+            if val in seen:
+                return True
+            seen.add(k - val)
+        return False
+
+class Solution:
+    def findTarget(self, root, k):
         seen = set()
         def inorder(node):
             if not node:

@@ -1,9 +1,16 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+# DFS
+class Solution:
+    def rightSideView(self, root):
+        def dfs(node, depth, res):
+            if node:
+                if len(res) == depth:
+                    res.append(node.val)
+                dfs(node.right, depth + 1, res)
+                dfs(node.left, depth + 1, res)
+            return res
+
+        return dfs(root, 0, [])
+
 
 # BFS
 class Solution:
@@ -26,21 +33,4 @@ class Solution:
             level = next_level
 
         return res
-
-# DFS
-class Solution:
-    def rightSideView(self, root):
-        res = []
-        def recur(node, level):
-            if not node:
-                return
-            if len(res) == level:
-                res.append(node.val)
-            recur(node.right, level + 1)
-            recur(node.left, level + 1)
-
-        recur(root, 0)
-        return res
-
-
 

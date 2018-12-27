@@ -1,6 +1,11 @@
 class Solution:
     def rotatedDigits(self, N):
-
+        res = 0
+        for x in range(1, N + 1):
+            S = str(x)
+            if all(d not in '347' for d in S) and any(d in '2569' for d in S):
+                res += 1
+        return res
 
 class Solution:
     def rotatedDigits(self, N):

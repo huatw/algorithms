@@ -1,9 +1,3 @@
-# Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
 # m+n trick
 class Solution(object):
     def getIntersectionNode(self, headA, headB):
@@ -24,7 +18,7 @@ class Solution(object):
                 cnt += 1
 
         if a == b:
-            return
+            return a
 
 
 # m+n

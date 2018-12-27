@@ -1,14 +1,11 @@
 class Solution:
     def isHappy(self, n):
-        met = set([n])
+        seen = set([n])
 
         while n != 1:
-            n = sum([int(ch) * int(ch) for ch in str(n)])
-            if n in met:
+            n = sum(int(ch) ** 2 for ch in str(n))
+            if n in seen:
                 return False
-            met.add(n)
+            seen.add(n)
 
         return True
-
-
-

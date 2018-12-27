@@ -2,21 +2,21 @@
 class Solution:
     def isPossible(self, nums):
         num_cnt_map = collections.Counter(nums)
-        edge_map = collections.defaultdict(int)
+        range_map = collections.defaultdict(int)
 
         for num in nums:
             if num_cnt_map[num] == 0:
                 continue
-            elif edge_map[num - 1] > 0:
-                edge_map[num - 1] -= 1
-                edge_map[num] += 1
+            num_cnt_map[num] -= 1
+            if range_map[num - 1] > 0:
+                range_map[num - 1] -= 1
+                range_map[num] += 1
             elif num_cnt_map[num + 1] > 0 and num_cnt_map[num + 2] > 0:
                 num_cnt_map[num + 1] -= 1
                 num_cnt_map[num + 2] -= 1
-                edge_map[num + 2] += 1
+                range_map[num + 2] += 1
             else:
                 return False
-            num_cnt_map[num] -= 1
         return True
 
 # O(N2)

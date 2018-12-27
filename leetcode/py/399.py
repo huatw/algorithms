@@ -1,30 +1,3 @@
-# DFS
-class Solution:
-    def calcEquation(self, equations, values, queries):
-        from_to_map = collections.defaultdict(collections.defaultdict)
-
-        for (f, t), ratio in zip(equations, values):
-            from_to_map[f][t] = ratio
-            from_to_map[t][f] = 1 / ratio
-
-        def query(f, t, seen):
-            if  f in seen or f not in from_to_map or t not in from_to_map:
-                return -1.0
-            seen.add(f)
-            if f == t:
-                return 1.0
-            for next_f, ratio in from_to_map[f].items():
-                next_ratio = query(next_f, t, seen)
-                if next_ratio != -1.0:
-                    return next_ratio * ratio
-            seen.remove(f)
-            return -1.0
-
-        return [query(f, t, set()) for (f, t) in queries]
-
-
-
-
 # Union Find
 class UnionFind:
     def __init__(self):
@@ -60,3 +33,55 @@ class Solution:
         for (f, t), ratio in zip(equations, values):
             uf.union(f, t, ratio)
         return [uf.query(f, t) for f, t in queries]
+
+
+# DFS
+class Solution:
+    def calcEquation(self, equations, values, queries):
+        from_to_map = collections.defaultdict(collections.defaultdict)
+
+        for (f, t), ratio in zip(equations, values):
+            from_to_map[f][t] = ratio
+            from_to_map[t][f] = 1 / ratio
+
+        def query(f, t, seen):
+            if  f in seen or f not in from_to_map or t not in from_to_map:
+                return -1.0
+            seen.add(f)
+            if f == t:
+                return 1.0
+            for next_f, ratio in from_to_map[f].items():
+                next_ratio = query(next_f, t, seen)
+                if next_ratio != -1.0:
+                    return next_ratio * ratio
+            seen.remove(f)
+            return -1.0
+
+        return [query(f, t, set()) for (f, t) in queries]
+
+
+class Solution:
+    def calcEquation(self, equations, values, queries):
+        # assume no duplicate equations
+        f_t_map = collections.defaultdict(list)
+
+        for (f, t), ratio in zip(equations, values):
+            f_t_map[f].append((t, ratio))
+            f_t_map[t].append((f, 1 / ratio))
+
+        def dfs_query(f, t, seen):
+            if f not in f_t_map or t not in f_t_map:
+                return -1.0
+            if f == t:
+                return 1.0
+            seen.add(f)
+            for next_f, ratio in f_t_map[f]:
+                if next_f in seen:
+                    continue
+                ret_ratio = dfs_query(next_f, t, seen)
+                if ret_ratio != -1.0:
+                    return ratio * ret_ratio
+            seen.remove(f)
+            return -1.0
+
+        return [dfs_query(f, t, set()) for f, t in queries]

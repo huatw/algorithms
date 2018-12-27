@@ -12,6 +12,7 @@ class UnionFind:
             self.m[r1] = r2
             return True
         return False
+
     def find(self, n):
         if self.m[n] != n:
             self.m[n] = self.find(self.m[n])

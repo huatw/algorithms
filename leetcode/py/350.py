@@ -2,28 +2,11 @@ class Solution:
     def intersect(self, nums1, nums2):
         res = []
 
-        m = collections.defaultdict(int)
-
-        for n in nums1:
-            m[n] += 1
+        ch_cnt_map = collections.Counter(nums1)
 
         for n in nums2:
-            if n in m and m[n] > 0:
-                m[n] -= 1
-                res.append(n)
-
-        return res
-
-
-class Solution:
-    def intersect(self, nums1, nums2):
-        res = []
-
-        m = collections.Counter(nums1)
-
-        for n in nums2:
-            if n in m and m[n] > 0:
-                m[n] -= 1
+            if n in ch_cnt_map and ch_cnt_map[n] > 0:
+                ch_cnt_map[n] -= 1
                 res.append(n)
 
         return res
